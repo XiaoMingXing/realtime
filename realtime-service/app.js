@@ -26,7 +26,8 @@ io.on('connection', function (socket) {
     console.log("websocket connected from client");
     let dashboardService = require('./services/dashboardService');
     dashboardService.totalPv(function (result) {
-        socket.emit('newDataComes', result);
+        socket.emit('newDataComes', result.total);
+        socket.emit('browserDistribution', result.distribute);
     })
 
 });
