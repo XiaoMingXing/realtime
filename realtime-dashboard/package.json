@@ -1,0 +1,85 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "Your Team Dashboard",
+  "main": "pages/index.js",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "standard --verbose | snazzy && stylelint '**/*.js'",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielbayerlein/dashboard.git"
+  },
+  "keywords": [
+    "tv",
+    "dashboard"
+  ],
+  "author": "Daniel Bayerlein",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielbayerlein/dashboard/issues"
+  },
+  "homepage": "https://github.com/danielbayerlein/dashboard#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "babel-plugin-styled-components": "^1.2.1",
+    "bufferutil": "^3.0.3",
+    "dotenv-webpack": "^1.5.4",
+    "isomorphic-unfetch": "^2.0.0",
+    "js-base64": "^2.3.2",
+    "next": "^4.0.3",
+    "polished": "^1.9.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "socket.io-client": "^2.0.4",
+    "styled-components": "^2.4.0",
+    "tinytime": "^0.2.6",
+    "utf-8-validate": "^4.0.0",
+    "yup": "^0.24.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.2.2"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "babel": {
+    "presets": [
+      "next/babel"
+    ],
+    "plugins": [
+      [
+        "styled-components",
+        {
+          "ssr": true,
+          "displayName": true,
+          "preprocess": false
+        }
+      ]
+    ]
+  },
+  "stylelint": {
+    "processors": [
+      "stylelint-processor-styled-components"
+    ],
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-styled-components"
+    ],
+    "syntax": "scss",
+    "rules": {
+      "value-list-max-empty-lines": null
+    }
+  }
+}
