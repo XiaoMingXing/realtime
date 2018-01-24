@@ -1,9 +1,3 @@
-# kill thread by port 
-`
-lsof -n -i4TCP:3000 | grep LISTEN
-
-`
-
 # How to run each components
 
 ## Business components
