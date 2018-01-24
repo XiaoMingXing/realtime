@@ -45,7 +45,7 @@ bin/kafka-rest-start etc/kafka-rest/kafka-rest.properties
 currently it's just a main method with some logic code to transform the messages
 - If you are running in dev mode, just run the `Main.java`
 - If you are running in prod mode, the can use below command:
- `jar realtime-kafka-streams.jar Pipe.java`
+ `jar realtime-kafka-streams.jar Transformer.java`
  
 ## Run mongo DB
 

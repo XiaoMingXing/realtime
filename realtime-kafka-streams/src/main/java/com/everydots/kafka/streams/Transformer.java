@@ -40,7 +40,7 @@ import java.util.concurrent.CountDownLatch;
  * that reads from a source topic "streams-plaintext-input", where the values of messages represent lines of text,
  * and writes the messages as-is into a sink topic "streams-pipe-output".
  */
-public class Pipe {
+public class Transformer {
 
     private static final String SOURCE_TOPIC = "topic-test2";
     private static final String SINK_TOPIC = "sink-topic";
