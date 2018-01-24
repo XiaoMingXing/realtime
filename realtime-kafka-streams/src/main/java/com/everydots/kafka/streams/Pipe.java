@@ -55,7 +55,7 @@ public class Pipe {
         final Deserializer<JsonNode> jsonDeserializer = new JsonDeserializer();
         final Serde<JsonNode> jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
 
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 2 * 1000);
 
         final StreamsBuilder builder = new StreamsBuilder();

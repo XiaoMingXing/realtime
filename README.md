@@ -1,6 +1,6 @@
 # How to run each components
 
-## Business components
+## 1.Run business system
 
 `
 cd {PROJECT_HOME}/realtime-react
@@ -8,12 +8,13 @@ npm start
 `
 After start successfully, the business system will run with port 8088
 
-## confluent kafka rest
+## 2.Run confluent kafka rest
 
 - download confluent package from `https://www.confluent.io/download/`
 - unzip file and add below shell into `~/.bashrc'
+
 `
- export CONFLUENT_HOME=~/path/of/confluent
+export CONFLUENT_HOME=~/path/of/confluent
 `
 - run below command to make the config works
 `
@@ -26,8 +27,10 @@ source ~/.bashrc
   bootstrap.servers=http://184.73.79.82:9092
   `
   + add cross domain access support to allow business system to access with HTTP
+  
   `
   access.control.allow.origin=*
+  
   access.control.allow.methods=GET,POST,PUT,DELETE,OPTIONS,HEAD
   `
 
@@ -60,9 +63,10 @@ mongod --dbpath mongodb/
 ## Run kafka connector
 
 - first run `mvn clean package` to build package
-- run below command to go inside of project folder
+- run below command to go inside of project folder and build
 `
 cd ${PROJECT_FOLDER}/realtime-kafka-mongo-connector
+mvn clean package
 `
 - run kafka connector with below commands
 `
