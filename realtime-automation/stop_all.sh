@@ -1,0 +1,1 @@
+netstat -vanp tcp | grep 8088
