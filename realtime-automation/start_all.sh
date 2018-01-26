@@ -7,7 +7,7 @@ export MONGODB_DATA_PATH=~/Desktop/Developer
 
 run_buz_sys(){
      echo "Run Business System ..."
-     cd ${PROJECT_HOME}/realtime-react
+     cd ${PROJECT_HOME}/realtime-business-system
      npm install
      bower install
      npm start &
@@ -27,14 +27,13 @@ run_kafka_streams(){
      mvn clean package
      cd target
      java -cp realtime-kafka-streams-1.0-SNAPSHOT-jar-with-dependencies.jar com.everydots.kafka.streams.Transformer &
-
 }
 
 # Run mongoDB
 run_mongo(){
     echo "Running Mongo DB ..."
-    cd ${MONGODB_DATA_PATH}
-    mongod --dbpath mongodb/ &
+    #cd ${MONGODB_DATA_PATH}
+    #mongod --dbpath mongodb/ &
 }
 
 
@@ -42,7 +41,7 @@ run_mongo(){
 run_kafka_connector(){
     echo "Run Kafka Connector ..."
     #build connector package
-    cd ${PROJECT_HOME}/realtime-kafka-mongo-connector
+    cd ${PROJECT_HOME}/realtime-kafka-connectors
     mvn clean package
 
     #run the connector
