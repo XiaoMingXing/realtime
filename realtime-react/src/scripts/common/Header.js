@@ -33,12 +33,10 @@ class Header extends Component {
                             </div>
                             <div className="col-md-6">
                                 <ul className="nav navbar-nav">
-                                    <li><Link to="/">主页</Link></li>
-                                    <li><Link to="/preSale">售前管理</Link></li>
-                                    <li><Link to="/bigData">大数据</Link></li>
-                                    <li><Link to="/ai">人工智能</Link></li>
-                                    <li><Link to="/blockChain">区块链</Link></li>
-                                    <li><Link to="/about">关于我们</Link></li>
+                                    <li><Link to="/">Main</Link></li>
+                                    <li><Link to="/data">Data</Link></li>
+                                    <li><Link to="/ml">ML</Link></li>
+                                    <li><Link to="/about">About us</Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-3 searchFrom">

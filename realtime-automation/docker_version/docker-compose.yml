@@ -1,0 +1,14 @@
+version: '2'
+services:
+    mongodb:
+        image: mongo
+        container_name: "mongodb"
+        environment:
+          - MONGO_DATA_DIR=/tmp/data/db
+          - MONGO_LOG_DIR=/tmp/logs/null
+        volumes:
+          - /tmp/mongodb:/tmp/mongodb
+        ports:
+            - 27017:27017
+            - 27018:27018
+        command: mongod --smallfiles --logpath=/dev/null # --quiet

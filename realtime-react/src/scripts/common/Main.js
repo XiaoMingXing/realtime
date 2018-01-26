@@ -1,17 +1,19 @@
 import React, {Component} from "react";
-import { Switch, Route } from 'react-router-dom'
-import BigDataMainView from "../bigdata/Main";
+import {Route, Switch} from 'react-router-dom'
+import DataMainView from "../data/Main";
 import HomeView from "../common/HomeView";
-import PreSaleMainView from "../preSale/Main";
+import MLMainView from "../ml/Main";
+import AboutUsMainView from "../about/Main";
 
 class Main extends Component {
 
     render() {
         return (<div>
             <Switch>
-                <Route exact path="/" component={HomeView} />
-                <Route path="/preSale" component={PreSaleMainView} />
-                <Route path="/bigData" component={BigDataMainView} />
+                <Route exact path="/" component={HomeView}/>
+                <Route path="/ml" component={MLMainView}/>
+                <Route path="/data" component={DataMainView}/>
+                <Route path="/about" component={AboutUsMainView}/>
             </Switch>
 
         </div>);

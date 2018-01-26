@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {ListGroup, ListGroupItem} from "react-bootstrap";
 
-class Main extends Component {
+class MLMainView extends Component {
 
     render() {
-        var rows = this.fetchRows();
+        let rows = this.fetchRows();
         return (<div>
 
             <h1>Do some pre-sale display !!</h1>
@@ -34,8 +34,8 @@ class Main extends Component {
     };
 
     fetchRows() {
-        return "Syu";
+        return "Wait for implement";
     }
 }
 
-export default Main;
+export default MLMainView;
