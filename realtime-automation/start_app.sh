@@ -18,6 +18,8 @@ prepare(){
 update_repo(){
    cd ${PROJECT_HOME}
    git pull
+   cd ../realtime-automation
+   ./start_app.sh
 }
 
 run_buz_sys(){
