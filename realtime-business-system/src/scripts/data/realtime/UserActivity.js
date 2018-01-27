@@ -3,7 +3,7 @@ import axios from "axios";
 
 class UserActivity extends Component {
 
-    KAFKA_REST = "http://localhost:8082/";
+    KAFKA_REST = "http://35.200.183.133:8082/";
     CONSUMER_NAME = "my_json_consumer";
     CONSUMER_INSTANCE_NAME = "my_consumer_instance";
     TOPICS = ["topic-test2"];
@@ -25,7 +25,7 @@ class UserActivity extends Component {
             infoMsg: '',
             consumedMessage: [],
             config: {
-                broker_url: "http://localhost:8082",
+                broker_url: "http://35.200.183.133:8082",
                 topic: "topic-test2"
             }
         };

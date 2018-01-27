@@ -4,6 +4,10 @@
 export PROJECT_HOME=~/projects/realtime
 export CONFLUENT_HOME=~/projects/confluent-4.0.0
 
+prepare(){
+    cd ${PROJECT_HOME}
+    git pull
+}
 
 #start confluent kafka rest
 run_kafka_rest(){
@@ -33,6 +37,8 @@ run_kafka_connector(){
     #run the connector
     ${CONFLUENT_HOME}/bin/connect-standalone config/worker.properties config/connect.properties &
 }
+
+prepare
 
 run_kafka_rest
 run_kafka_streams
