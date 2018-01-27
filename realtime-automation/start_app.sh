@@ -18,8 +18,6 @@ prepare(){
 update_repo(){
    cd ${PROJECT_HOME}
    git pull
-   cd ../realtime-automation
-   ./start_app.sh
 }
 
 run_buz_sys(){
@@ -43,7 +41,7 @@ run_node_app(){
 run_dashboard(){
     echo "Run Dashboard ..."
     cd ${PROJECT_HOME}/realtime-dashboard
-    npm run dev -- -p 3001
+    npm run dev -- -p 3001 &
 }
 
 
