@@ -22,6 +22,10 @@ app.use(function (req, res, next) {
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 
+http.listen(8080, function (err, res) {
+    console.log('Express server listening on port ' + 8080);
+});
+
 io.on('connection', function (socket) {
     console.log("websocket connected from client");
     let dashboardService = require('./services/dashboardService');
@@ -30,10 +34,6 @@ io.on('connection', function (socket) {
         socket.emit('browserDistribution', result.distribute);
     })
 
-});
-
-http.listen(8080, function (err, res) {
-    console.log('Express server listening on port ' + 8080);
 });
 
 app.set('views', path.join(__dirname, 'views'));
