@@ -5,7 +5,6 @@ export PROJECT_HOME=~/projects/realtime
 export CONFLUENT_HOME=~/projects/confluent-4.0.0
 
 prepare(){
-    sudo su -
     cd ${PROJECT_HOME}
     git pull
 }
