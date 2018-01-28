@@ -15,7 +15,7 @@ export default class PagePV extends Component {
         this.state = {
             totalPV: 0
         };
-        let BACKEND_URL = "http://localhost:8080";
+        let BACKEND_URL = "http://35.227.63.169:8080";
         this.socket = io(BACKEND_URL);
     }
 
