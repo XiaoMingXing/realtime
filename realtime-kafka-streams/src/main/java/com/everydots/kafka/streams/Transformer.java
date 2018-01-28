@@ -48,7 +48,7 @@ public class Transformer {
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "184.73.79.82:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "35.197.154.212:9092");
 
 
         final Serializer<JsonNode> jsonSerializer = new JsonSerializer();

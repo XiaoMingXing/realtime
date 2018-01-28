@@ -24,7 +24,7 @@ source ~/.bashrc
 
   + change the `bootstrap.servers` to remote kafka address
   `
-  bootstrap.servers=http://184.73.79.82:9092
+  bootstrap.servers=http://35.197.154.212:9092
   `
   + add cross domain access support to allow business system to access with HTTP
   
