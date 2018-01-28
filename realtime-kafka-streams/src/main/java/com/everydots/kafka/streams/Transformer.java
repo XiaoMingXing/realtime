@@ -30,6 +30,8 @@ import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Properties;
@@ -44,6 +46,8 @@ public class Transformer {
 
     private static final String SOURCE_TOPIC = "topic-test2";
     private static final String SINK_TOPIC = "sink-topic";
+
+    final static Logger logger = LoggerFactory.getLogger(Transformer.class);
 
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
@@ -75,6 +79,7 @@ public class Transformer {
                             .put("browser", userAgent.getBrowser().getName())
                             .put("device", userAgent.getOperatingSystem().getDeviceType().getName())
                             .put("action", value.get("action"));
+                    logger.debug(String.format("Transform message: %s", jsonNode.toString()));
                     return jsonNode;
                 });
         records.to(SINK_TOPIC, Produced.with(Serdes.String(), jsonSerde));

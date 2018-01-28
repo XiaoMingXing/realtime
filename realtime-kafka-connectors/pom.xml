@@ -8,11 +8,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>realtime-kafka-mongo-connector</artifactId>
+    <artifactId>realtime-kafka-connectors</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>realtime-kafka-mongo-connector</name>
+    <name>realtime-kafka-connectors</name>
 
     <properties>
         <kafka.version>1.0.0</kafka.version>
