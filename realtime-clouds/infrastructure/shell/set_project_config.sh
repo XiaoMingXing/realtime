@@ -2,5 +2,7 @@
 
 set -e
 
-echo "setting gcloud cli core/project property to: tw-data-engineering-demo"
-gcloud config set project tw-data-engineering-demo
+project_id="tw-data-engineering-demo"
+
+echo "setting gcloud cli core/project property to: ${project_id}"
+gcloud config set project ${project_id}

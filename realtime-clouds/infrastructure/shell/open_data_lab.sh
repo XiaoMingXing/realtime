@@ -3,7 +3,7 @@
 set -e
 
 if [[ $1 == '' ]]; then
-  echo "ERROR: Usage ./create_dataproc_cluster.sh <cluster_name>"
+  echo "ERROR: Usage ./open_data_lab.sh <cluster_name>"
   exit 1
 fi
 
