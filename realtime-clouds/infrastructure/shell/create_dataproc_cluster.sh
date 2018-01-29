@@ -16,5 +16,5 @@ echo "Creating a Dataproc cluster. This will take a few minutes..."
 
 gcloud dataproc clusters create ${cluster_name} --single-node \
   --region=asia-southeast1 \
-  --zone=asia-southeast1-a \ # todo: test this line
+  --zone=asia-southeast1-a \
   --initialization-actions gs://dataproc-initialization-actions/datalab/datalab.sh
