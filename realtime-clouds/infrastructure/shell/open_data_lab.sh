@@ -9,7 +9,7 @@ fi
 
 cluster_vm_name=$1-m  # cluster vm name = cluster name + '-m'
 
-gcloud compute ssh ${cluster_vm_name} --zone=asia-southeast1-b -- -D 1080  
+gcloud compute ssh ${cluster_vm_name} --zone=asia-southeast1-a -- -D 1080  
 
 echo "To access datalab, open another terminal in your local machine and run the following command:"
 echo "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --proxy-server="socks5://localhost:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" --user-data-dir=/tmp/junk"
