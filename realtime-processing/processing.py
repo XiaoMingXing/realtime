@@ -1,6 +1,6 @@
-import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, DateType, DoubleType, LongType
+
 
 def process():
     spark = SparkSession.builder \
@@ -8,7 +8,8 @@ def process():
         .master("local[*]") \
         .config("spark.jars",
                 "jars/gcs-connector-latest-hadoop2.jar") \
-        .config("spark.jars.packages", "org.mongodb:mongo-java-driver:3.6.1,org.mongodb:bson:3.6.1,org.mongodb.spark:mongo-spark-connector_2.11:2.2.1") \
+        .config("spark.jars.packages",
+                "org.mongodb:mongo-java-driver:3.6.1,org.mongodb:bson:3.6.1,org.mongodb.spark:mongo-spark-connector_2.11:2.2.1") \
         .config("spark.mongodb.output.uri", "mongodb://35.187.230.101") \
         .config("spark.mongodb.output.database", "realtime") \
         .config("spark.mongodb.output.collection", "processing") \
