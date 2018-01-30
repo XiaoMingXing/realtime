@@ -5,19 +5,16 @@ from pyspark.sql.types import StructType, StructField, DateType, DoubleType, Lon
 def process():
     spark = SparkSession.builder \
         .appName("realtime processing") \
-        .master("local[*]") \
-        .config("spark.jars",
-                "jars/gcs-connector-latest-hadoop2.jar") \
         .config("spark.jars.packages",
                 "org.mongodb:mongo-java-driver:3.6.1,org.mongodb:bson:3.6.1,org.mongodb.spark:mongo-spark-connector_2.11:2.2.1") \
         .config("spark.mongodb.output.uri", "mongodb://35.187.230.101") \
         .config("spark.mongodb.output.database", "realtime") \
         .config("spark.mongodb.output.collection", "processing") \
         .getOrCreate()
-
+    # .config("spark.jars","jars/gcs-connector-latest-hadoop2.jar") \
     spark._jsc.hadoopConfiguration().set('google.cloud.auth.service.account.enable', 'true')
-    spark._jsc.hadoopConfiguration().set('google.cloud.auth.service.account.json.keyfile',
-                                         'credentials/tw-data-engineering-demo-3cdf33282c45.json')
+    # spark._jsc.hadoopConfiguration().set('google.cloud.auth.service.account.json.keyfile',
+    #                                      'credentials/tw-data-engineering-demo-3cdf33282c45.json')
     spark._jsc.hadoopConfiguration().set('fs.gs.impl', 'com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem')
     spark._jsc.hadoopConfiguration().set('fs.AbstractFileSystem.gs.impl',
                                          'com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem')
