@@ -1,4 +1,4 @@
-from google.appengine.ext import vendor
+# from google.appengine.ext import vendor
 
-# Add any libraries install in the "lib" folder.
-vendor.add('lib')
+# # Add any libraries install in the "lib" folder.
+# vendor.add('lib')

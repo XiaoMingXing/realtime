@@ -16,6 +16,7 @@ _temp
 *.iml
 **/*.csv
 target
+**/*.pyc
 
 #For authentication-dashboard module
 .next

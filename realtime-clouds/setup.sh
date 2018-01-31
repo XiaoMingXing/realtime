@@ -24,4 +24,4 @@ install_brew_package python3
 # Create virtual environment installing python dependencies
 python3 -m venv .venv
 source .venv/bin/activate
-pip3 install -r requirements.txt
+pip3 install -r ./app/app-engine-cron/requirements.txt
