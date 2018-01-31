@@ -1,3 +1,4 @@
 *credentials.json
 **/*.tfstate
 **/*.tfstate.backup
+.venv

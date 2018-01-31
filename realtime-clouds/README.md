@@ -1,5 +1,12 @@
 # ThoughtWorks Data Engineering Demo
 
+### Getting started
+
+1. make sure you're in the `realtime-clouds` directory
+2. in your terminal, run: `./setup.sh`
+3. activate the virtual environment: `source .venv/bin/activate`
+4. start coding!
+
 ### App
 
 #####
