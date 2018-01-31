@@ -1,14 +1,14 @@
 import logging
 
 from flask import Flask
-from publish_current_bitcoin_price import publish_messages, get_stock_price
+import bitcoin_publisher
 
 app = Flask(__name__)
 
 @app.route('/publish-bitcoin-price')
 def get_stock_price():
-  price = publish_current_bitcoin_price.get_stock_price()
-  publish_messages('tw-data-engineering-demo', 'bitcoin-stock-price', price) # publish message
+  price = bitcoin_publisher.get_stock_price()
+  bitcoin_publisher.publish_messages('tw-data-engineering-demo', 'bitcoin-stock-price', price) # publish message
   return 'bitcoin price: {}'.format(price)
 
 @app.errorhandler(500)
