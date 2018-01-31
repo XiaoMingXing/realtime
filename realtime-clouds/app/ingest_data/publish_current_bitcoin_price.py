@@ -15,21 +15,24 @@ def get_stock_price():
     print('current_stock_price: {}'.format(current_stock_price))
     return current_stock_price
   except Error:
-    raise Error('Bitcoin stock price not available')
+    raise Exception('Bitcoin stock price not available')
   
 def publish_messages(project, topic_name):
     """Publishes multiple messages to a Pub/Sub topic."""
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic_name)
 
-    current_stock_price = get_stock_price()
-    time_now = str(datetime.datetime.utcnow())
-    
-    data = u'bitcoin-price at {}: {}'.format(time_now, current_stock_price)
-    # Data must be a bytestring
-    data = data.encode('utf-8')
-    publisher.publish(topic_path, data=data)
+    try:
+      current_stock_price = get_stock_price()
+      time_now = str(datetime.datetime.utcnow())
+      
+      data = u'bitcoin-price at {}: {}'.format(time_now, current_stock_price)
+      # Data must be a bytestring
+      data = data.encode('utf-8')
+      publisher.publish(topic_path, data=data)
 
-    print('Published message: {}'.format(data))
+      print('Published message: {}'.format(data))
+    except Exception as e:
+        print('Error: ', e)
 
 publish_messages('tw-data-engineering-demo', 'bitcoin-stock-price')
