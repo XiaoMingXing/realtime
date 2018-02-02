@@ -2,7 +2,6 @@ import os
 
 from google.cloud import storage
 
-
 class StorageClient:
     def __init__(self, options):
         self.bucket_name = options["bucket_name"]
