@@ -1,4 +1,5 @@
 import googleapiclient.discovery
+import time
 
 
 class DataprocClient:
@@ -100,25 +101,38 @@ class DataprocClient:
                 break
         if not cluster_exist:
             res = self.create_cluster(cluster_name=cluster_name)
+            self.wait_for_operation_version_2(res["name"])
 
         res = self.submit_pyspark_job(cluster_name, bucket_name)
         print("Job id:  ", res)
 
+    def wait_for_operation(self, operation):
+        print('Waiting for operation to finish...')
+        while True:
+            operations = self.get_client().projects().regions().operations()
+            result = operations.get(
+                name=operation).execute()
 
-if __name__ == '__main__':
-    # project = "tw-data-engineering-demo"
-    # region = "asia-southeast1"
-    # zone = "asia-southeast1-b"
-    # bucket_name = "realtime-bucket"
-    # cluster_name = "new-cluster"
-    #
-    # dataproc_client = DataprocClient({
-    #     "project": project,
-    #     "region": region,
-    #     "zone": zone,
-    #     "master_num": 1,
-    #     "worker_num": 2,
-    #     "filename": "processing.py"
-    # })
-    # res = dataproc_client.provision_and_submit(cluster_name, bucket_name)
-    print(res)
+            if result.get("metadata").get('status').get('state') == 'RUNNING':
+                print("done.")
+                if 'error' in result:
+                    raise Exception(result['error'])
+                return result
+            time.sleep(1)
+
+    def wait_for_operation_version_2(self, operation):
+        dataproc = googleapiclient.discovery.build('dataproc', 'v1')
+
+        print('Waiting for operation to finish...')
+        while True:
+            result = dataproc.zoneOperations().get(
+                project=self.project,
+                zone=self.zone,
+                operation=operation).execute()
+
+            if result['status'] == 'DONE':
+                print("done.")
+                if 'error' in result:
+                    raise Exception(result['error'])
+                return result
+            time.sleep(1)
