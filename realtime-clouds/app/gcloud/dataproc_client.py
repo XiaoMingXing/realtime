@@ -1,13 +1,14 @@
 import googleapiclient.discovery
 
+
 class DataprocClient:
     def __init__(self, options):
-        self.project = options["project"]
-        self.region = options["region"]
-        self.zone = options["zone"]
-        self.master_num = options["master_num"]
-        self.worker_num = options["worker_num"]
-        self.filename = options["filename"]
+        self.project = options.get("project", "tw-data-engineering-demo")
+        self.region = options.get("region", "asia-southeast1")
+        self.zone = options.get("zone", "asia-southeast1-b")
+        self.master_num = options.get("master_num", 1)
+        self.worker_num = options.get("worker_num", 2)
+        self.filename = options.get("filename", "processing.py")
 
     def get_client(self):
         """Builds a client to the dataproc API."""

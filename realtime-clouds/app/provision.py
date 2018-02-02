@@ -1,29 +1,28 @@
-from flask import Flask
+import json
+
+from flask import Flask, request
+from flask_cors import CORS
 from gcloud.dataproc_client import DataprocClient
 from gcloud.storage_client import StorageClient
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/provision_cluster')
+@app.route('/provision_cluster', methods=['POST'])
 def provision_cluster():
-    project = "tw-data-engineering-demo"
-    region = "asia-southeast1"
-    zone = "asia-southeast1-b"
-    bucket_name = "realtime-bucket"
-    cluster_name = "new-cluster"
+    req_data = request.get_json()
+    dataproc_client = DataprocClient(req_data)
+    res = dataproc_client.provision_and_submit(req_data["cluster_name"], req_data["bucket_name"])
+    return json.dumps(res)
 
-    dataproc_client = DataprocClient({
-        "project": project,
-        "region": region,
-        "zone": zone,
-        "master_num": 1,
-        "worker_num": 2,
-        "filename": "processing.py"
-    })
 
-    dataproc_client.provision_and_submit(cluster_name, bucket_name)
-    return "success"
+@app.route('/delete_cluster', methods=['POST'])
+def delete_cluster():
+    req_data = request.get_json()
+    dataproc_client = DataprocClient(req_data)
+    res = dataproc_client.delete_cluster(req_data["cluster_name"])
+    return json.dumps(res)
 
 
 if __name__ == '__main__':
