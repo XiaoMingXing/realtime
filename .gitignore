@@ -21,4 +21,6 @@ target
 #For authentication-dashboard module
 .next
 
+package-lock.json
+
 

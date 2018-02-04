@@ -1,5 +1,6 @@
-import googleapiclient.discovery
 import time
+
+import googleapiclient.discovery
 
 
 class DataprocClient:
@@ -90,6 +91,22 @@ class DataprocClient:
             clusterName=cluster_name).execute()
         return result
 
+    def wait_for_cluster_creation(self, cluster_name):
+        print('Waiting for cluster creation...')
+        while True:
+            result = self.get_client().projects().regions().clusters().list(
+                projectId=self.project,
+                region=self.region).execute()
+            cluster_list = result['clusters']
+            cluster = [c for c in cluster_list
+                       if c['clusterName'] == cluster_name][0]
+            if cluster['status']['state'] == 'ERROR':
+                raise Exception(result['status']['details'])
+            if cluster['status']['state'] == 'RUNNING':
+                print("Cluster created.")
+                break
+            time.sleep(2)
+
     def provision_and_submit(self, cluster_name, bucket_name):
         res = self.list_clusters()
         cluster_exist = False
@@ -100,39 +117,11 @@ class DataprocClient:
                 cluster_exist = True
                 break
         if not cluster_exist:
-            res = self.create_cluster(cluster_name=cluster_name)
-            self.wait_for_operation_version_2(res["name"])
+            self.create_cluster(cluster_name=cluster_name)
+            self.wait_for_cluster_creation(cluster_name)
 
         res = self.submit_pyspark_job(cluster_name, bucket_name)
         print("Job id:  ", res)
+        return res
 
-    def wait_for_operation(self, operation):
-        print('Waiting for operation to finish...')
-        while True:
-            operations = self.get_client().projects().regions().operations()
-            result = operations.get(
-                name=operation).execute()
 
-            if result.get("metadata").get('status').get('state') == 'RUNNING':
-                print("done.")
-                if 'error' in result:
-                    raise Exception(result['error'])
-                return result
-            time.sleep(1)
-
-    def wait_for_operation_version_2(self, operation):
-        dataproc = googleapiclient.discovery.build('dataproc', 'v1')
-
-        print('Waiting for operation to finish...')
-        while True:
-            result = dataproc.zoneOperations().get(
-                project=self.project,
-                zone=self.zone,
-                operation=operation).execute()
-
-            if result['status'] == 'DONE':
-                print("done.")
-                if 'error' in result:
-                    raise Exception(result['error'])
-                return result
-            time.sleep(1)
