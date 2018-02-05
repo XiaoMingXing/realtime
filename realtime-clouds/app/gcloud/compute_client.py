@@ -192,19 +192,43 @@ class ComputeClient:
         }
 
     def list_instances(self):
-        result = self.get_client().instances().list(project=project, zone=zone).execute()
-        return result['items']
+        result = self.get_client().instances().list(project=self.project, zone=self.zone).execute()
+        return result.get('items', None)
+
+    def provision_vms(self):
+        request_json = {"project": self.project, "region": self.region, "zone": self.zone}
+        self.provision_mongo_vm()
+        # self.provision_kafka_vm()
+        self.provision_app_vm()
+        # self.provision_connector_vm()
+        return format_json(request_json, self.list_instances())
+
+
+def format_json(request_json, items):
+    if items is None or len(items) is 0:
+        return
+    servers = []
+    for item in items:
+        public_ip = item["networkInterfaces"][0]["accessConfigs"][0]["natIP"]
+        private_ip = item["networkInterfaces"][0]["networkIP"]
+        name = item["name"]
+        server = {
+            "public_ip": public_ip,
+            "private_ip": private_ip,
+            "name": name
+        }
+        servers.append(server)
+    request_json["servers"] = servers
+    return request_json
 
 
 if __name__ == '__main__':
     project = "tw-data-engineering-demo"
     region = "asia-southeast1"
     zone = "asia-southeast1-b"
-    compute_client = ComputeClient({
-        "project": project,
-        "region": region,
-        "zone": zone
-    })
+
+    request_json = {"project": project, "region": region, "zone": zone}
+    compute_client = ComputeClient(request_json)
+    compute_client.provision_vms()
     items = compute_client.list_instances()
-    #items[0]["networkInterfaces"][0]["accessConfigs"][0]["natIP"]
-    print(items)
+    res = format_json(request_json, items)

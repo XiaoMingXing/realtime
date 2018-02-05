@@ -2,8 +2,8 @@ import pymongo
 
 
 class MongoClient:
-    def __init__(self):
-        connection = pymongo.MongoClient("mongodb://localhost")
+    def __init__(self, url):
+        connection = pymongo.MongoClient(url)
         db = connection["local"]
         self.collection = db["config"]
 
@@ -18,7 +18,7 @@ class MongoClient:
 if __name__ == '__main__':
     mongo_client = MongoClient()
 
-    records = {
+    record = {
         "_id": "2",
         "client_id": "customer",
         "envs": [
@@ -32,4 +32,4 @@ if __name__ == '__main__':
             }
         ]
     }
-    mongo_client.save_record(record=records)
+    mongo_client.save_record(record=record)
