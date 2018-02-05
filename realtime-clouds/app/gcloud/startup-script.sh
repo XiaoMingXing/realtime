@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cd /home/mxxiao/projects/realtime/realtime-automation
-./start_app.sh
+sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_app.sh"
