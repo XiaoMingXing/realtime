@@ -1,3 +1,4 @@
+import os
 import time
 
 import googleapiclient.discovery
@@ -32,8 +33,13 @@ class ComputeClient:
         compute = self.get_client()
         # Configure the machine
         machine_type = "projects/{}/zones/{}/machineTypes/n1-standard-1".format(self.project, self.zone)
+
+        startup_script = open(
+            os.path.join(
+                os.path.dirname(__file__), 'startup-script.sh'), 'r').read()
         config = {
             'name': instance_name,
+
             'machineType': machine_type,
 
             # Specify the boot disk and the image to use as a source.
@@ -82,9 +88,16 @@ class ComputeClient:
 
             # Metadata is readable from the instance and allows you to
             # pass configuration from deployment scripts to instances.
-            "metadata": {
-                "items": []
+            'metadata': {
+                'items': [{
+                    'key': 'startup-script',
+                    'value': ''.join(['#!/bin/bash\n',
+                                      'cd /home/mxxiao/projects/realtime/realtime-automation\n',
+                                      'git pull',
+                                      './start_app.sh\n'])
+                }]
             },
+
             "tags": {
                 "items": [
                     "http-server"
