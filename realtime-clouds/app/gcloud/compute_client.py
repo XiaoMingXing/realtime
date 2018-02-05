@@ -191,6 +191,10 @@ class ComputeClient:
             }
         }
 
+    def list_instances(self):
+        result = self.get_client().instances().list(project=project, zone=zone).execute()
+        return result['items']
+
 
 if __name__ == '__main__':
     project = "tw-data-engineering-demo"
@@ -201,4 +205,6 @@ if __name__ == '__main__':
         "region": region,
         "zone": zone
     })
-    compute_client.provision_kafka_vm()
+    items = compute_client.list_instances()
+    #items[0]["networkInterfaces"][0]["accessConfigs"][0]["natIP"]
+    print(items)
