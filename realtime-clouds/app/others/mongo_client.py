@@ -16,7 +16,7 @@ class MongoClient:
 
 
 if __name__ == '__main__':
-    mongo_client = MongoClient()
+    mongo_client = MongoClient("mongodb://localhost")
 
     record = {
         "_id": "2",
