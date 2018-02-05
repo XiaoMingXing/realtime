@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start business system
-export PROJECT_HOME=~/projects/realtime
+export PROJECT_HOME=/home/mxxiao/projects/realtime
 
 prepare(){
     #install git
@@ -41,7 +41,7 @@ run_node_app(){
 run_dashboard(){
     echo "Run Dashboard ..."
     cd ${PROJECT_HOME}/realtime-dashboard
-    npm run dev -- -p 3001
+    npm run dev -- -p 3001 &
 }
 
 

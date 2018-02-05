@@ -26,7 +26,7 @@
 ##use below commands to consume message into console
 
 ```shell
-bin/kafka-console-consumer --bootstrap-server 184.73.79.82:9092 --topic sink-topic
+bin/kafka-console-consumer --bootstrap-server 35.197.154.212:9092 --topic sink-topic
 ```
 
 ###use below commands to run kafka-rest

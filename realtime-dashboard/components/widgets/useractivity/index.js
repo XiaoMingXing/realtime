@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import Widget from '../../widget'
 import CircleProgress from '../../circle-progress'
-import io from "socket.io-client"
+import socket from '../../socket'
 
 
 export default class PagePV extends Component {
@@ -15,13 +15,11 @@ export default class PagePV extends Component {
         this.state = {
             totalPV: 0
         };
-        let BACKEND_URL = "http://localhost:8080";
-        this.socket = io(BACKEND_URL);
     }
 
     componentDidMount() {
         let _this = this;
-        this.socket.on("newDataComes", function (data) {
+        socket.on("newDataComes", function (data) {
             _this.setState({totalPV: data});
         })
     }

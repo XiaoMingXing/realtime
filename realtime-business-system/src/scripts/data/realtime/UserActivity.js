@@ -3,11 +3,10 @@ import axios from "axios";
 
 class UserActivity extends Component {
 
-    KAFKA_REST = "http://localhost:8082/";
+    KAFKA_REST = "http://35.200.183.133:8082/";
     CONSUMER_NAME = "my_json_consumer";
     CONSUMER_INSTANCE_NAME = "my_consumer_instance";
     TOPICS = ["topic-test2"];
-    TOPICS1 = ["streams-pipe-output"];
 
     constructor(props) {
         super(props);
@@ -23,11 +22,7 @@ class UserActivity extends Component {
                 }]
             }),
             infoMsg: '',
-            consumedMessage: [],
-            config: {
-                broker_url: "http://localhost:8082",
-                topic: "topic-test2"
-            }
+            consumedMessage: []
         };
         axios.defaults.headers.post['Content-Type'] = "application/vnd.kafka.json.v2+json";
         axios.defaults.headers.post['Accept'] = "application/vnd.kafka.v2+json";
