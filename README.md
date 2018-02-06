@@ -36,8 +36,9 @@ source ~/.bashrc
 
 - run `kafka-rest` with below commands
 `
-cd ${CONFLUENT_HOME}
-bin/kafka-rest-start etc/kafka-rest/kafka-rest.properties
+cd ${PROJECT_HOME}
+${CONFLUENT_HOME}/bin/kafka-rest-start configs/kafka-rest-config.properties
+~/projects/confluent-4.0.0/bin/kafka-rest-start configs/kafka-rest-config.properties
 `
 
 ## Run kafka stream

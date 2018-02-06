@@ -17,9 +17,14 @@
 package com.everydots.kafka.streams;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
@@ -33,7 +38,11 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
@@ -44,15 +53,21 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Transformer {
 
-    private static final String SOURCE_TOPIC = "topic-test2";
-    private static final String SINK_TOPIC = "sink-topic";
+    private static final String CONFIG_MANAGEMENT_URL = "http://localhost:9999/config/local";
 
     final static Logger logger = LoggerFactory.getLogger(Transformer.class);
 
     public static void main(String[] args) throws Exception {
+
+        HashMap hashMap = getConfig();
+        String kafkaBrokerUrl = hashMap.get("kafka_broker_url").toString();
+        String kafkaSourceTopic = hashMap.get("kafka_source_topic").toString();
+        String kafkaSinkTopic = hashMap.get("kafka_sink_topic").toString();
+
+        System.out.println(kafkaBrokerUrl + kafkaSinkTopic + kafkaSourceTopic);
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "35.197.154.212:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBrokerUrl);
 
 
         final Serializer<JsonNode> jsonSerializer = new JsonSerializer();
@@ -65,7 +80,7 @@ public class Transformer {
         final StreamsBuilder builder = new StreamsBuilder();
 
         final Consumed<String, JsonNode> consumed = Consumed.with(Serdes.String(), jsonSerde);
-        KStream<String, JsonNode> records = builder.stream(SOURCE_TOPIC, consumed)
+        KStream<String, JsonNode> records = builder.stream(kafkaSourceTopic, consumed)
                 .filterNot((key, value) -> value.get("agent") == null || value.get("user") == null)
                 .mapValues(value -> {
                     LocalDateTime now = LocalDateTime.now();
@@ -82,7 +97,7 @@ public class Transformer {
                     logger.debug(String.format("Transform message: %s", jsonNode.toString()));
                     return jsonNode;
                 });
-        records.to(SINK_TOPIC, Produced.with(Serdes.String(), jsonSerde));
+        records.to(kafkaSinkTopic, Produced.with(Serdes.String(), jsonSerde));
 
 
         final Topology topology = builder.build();
@@ -105,5 +120,24 @@ public class Transformer {
             System.exit(1);
         }
         System.exit(0);
+    }
+
+    private static HashMap getConfig() throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(CONFIG_MANAGEMENT_URL);
+
+        HttpResponse response = client.execute(request);
+        BufferedReader rd = new BufferedReader(
+                new InputStreamReader(response.getEntity().getContent()));
+
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+        System.out.println(result);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(result.toString(), HashMap.class);
     }
 }
