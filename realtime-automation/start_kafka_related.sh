@@ -12,8 +12,8 @@ prepare(){
 #start confluent kafka rest
 run_kafka_rest(){
      echo "Run Kafka Rest ..."
-     cd ${CONFLUENT_HOME}
-     bin/kafka-rest-start etc/kafka-rest/kafka-rest.properties &
+     cd ${PROJECT_HOME}
+     ${CONFLUENT_HOME}/bin/kafka-rest-start configs/kafka-rest-config.properties &
 }
 
 # run kafka streams transformation
@@ -35,7 +35,7 @@ run_kafka_connector(){
     mvn clean package
 
     #run the connector
-    ${CONFLUENT_HOME}/bin/connect-standalone config/worker.properties config/connect.properties &
+    ${CONFLUENT_HOME}/bin/connect-standalone config/worker-config.properties config/connect-config.properties &
 }
 
 prepare
