@@ -38,7 +38,7 @@ class ComputeClient:
         return self.wait_for_operation(res["name"])
 
     def provision_app_vm(self):
-        instance_name = "app-insatnce"
+        instance_name = "app-instance"
         ami_name = "realtime-app-ami-v2"
         startup_script = open(
             os.path.join(

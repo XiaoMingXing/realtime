@@ -2,6 +2,9 @@ let Record = require('../models/record');
 
 
 function realTimePv(callback) {
+
+
+
     Record.collection
         .find({}, {tailable: true, awaitdata: true, numberOfRetries: -1})
         .each(function (err, doc) {

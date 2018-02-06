@@ -10,8 +10,11 @@ class AutoRealtimeGCloud:
     def find_records(self, customer):
         return self.collection.find({"_id": customer})
 
+    def get_config(self, env):
+        record = self.find_records("customer1")
+        return record[0]
+
 
 if __name__ == '__main__':
-    auto_client = AutoRealtimeGCloud("mongodb://localhost")
-    record = auto_client.find_records("customer1")
-    print(record[0]["servers"])
+    config = AutoRealtimeGCloud("mongodb://localhost").get_config("local")
+    print(config)

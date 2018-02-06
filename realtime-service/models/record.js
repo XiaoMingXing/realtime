@@ -5,7 +5,7 @@ let Schema = mongoose.Schema;
 // can only define parts of fields
 let recordSchema = new Schema({
     userId: String
-}, {collection: 'activities'});
+}, {collection: 'activities', capped: {size: 102400, max: 100000, autoIndexId: true}});
 
 let Record = mongoose.model('Record', recordSchema);
 

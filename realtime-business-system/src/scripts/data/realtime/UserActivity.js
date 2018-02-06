@@ -1,12 +1,16 @@
 import React, {Component} from "react";
 import axios from "axios";
 
+
 class UserActivity extends Component {
 
-    KAFKA_REST = "http://35.200.183.133:8082/";
+    //set the default kafka rest to localhost
+    KAFKA_REST = "http://localhost:8082/";
     CONSUMER_NAME = "my_json_consumer";
     CONSUMER_INSTANCE_NAME = "my_consumer_instance";
     TOPICS = ["topic-test2"];
+
+    CONFIG_MANAGE_URL = "http://localhost:9999/config/local";
 
     constructor(props) {
         super(props);
@@ -24,6 +28,16 @@ class UserActivity extends Component {
             infoMsg: '',
             consumedMessage: []
         };
+
+        let _this = this;
+        axios.get(this.CONFIG_MANAGE_URL)
+            .then(function (config) {
+                console.log(config);
+                if (config.status === 200) {
+                    _this.KAFKA_REST = config.data["kafka_rest_url"];
+                }
+            });
+
         axios.defaults.headers.post['Content-Type'] = "application/vnd.kafka.json.v2+json";
         axios.defaults.headers.post['Accept'] = "application/vnd.kafka.v2+json";
 
