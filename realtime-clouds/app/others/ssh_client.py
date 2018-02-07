@@ -12,6 +12,15 @@ class SSHClient:
         print(stdout.read())
         self.ssh.close()
 
+    def run_scripts(self, servers, scripts):
+        if servers is None:
+            return
+        for server in servers:
+            hostname = server.get("public_ip")
+            instance_name = server.get("name")
+            command = scripts.get(instance_name)
+            self.run_command(hostname, command)
+
 
 if __name__ == '__main__':
     hostname = "35.197.154.212"

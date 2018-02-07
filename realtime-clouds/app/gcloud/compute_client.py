@@ -35,15 +35,15 @@ class ComputeClient:
     def get_client(self):
         return googleapiclient.discovery.build('compute', 'v1')
 
-    def wait_for_operation(self, operation):
-        print('Waiting for operation to finish...')
+    def wait_for_operation(self, operation, instance_name):
+        print('Waiting for {} to finish...'.format(instance_name))
         while True:
             result = self.get_client().zoneOperations().get(
                 project=self.project,
                 zone=self.zone,
                 operation=operation).execute()
 
-            if result['status'] == 'DONE':
+            if result['status'] == '{} Create done!'.format(instance_name):
                 print("done.")
                 if 'error' in result:
                     raise Exception(result['error'])
@@ -56,7 +56,7 @@ class ComputeClient:
             project=self.project,
             zone=self.zone,
             body=config).execute()
-        return self.wait_for_operation(res["name"])
+        return self.wait_for_operation(res["name"], config.get("name", None))
 
     def provision_app_vm(self):
         instance_name = "app-instance"
@@ -195,14 +195,14 @@ class ComputeClient:
 
             # Metadata is readable from the instance and allows you to
             # pass configuration from deployment scripts to instances.
-            "metadata": {
-                "items": [{
-                    # Startup script is automatically executed by the
-                    # instance upon startup.
-                    'key': 'startup-script',
-                    'value': startup_script
-                }, self.get_ssh_key()]
-            },
+            # "metadata": {
+            #     "items": [{
+            #         # Startup script is automatically executed by the
+            #         # instance upon startup.
+            #         'key': 'startup-script',
+            #         'value': startup_script
+            #     }, self.get_ssh_key()]
+            # },
 
             "tags": {
                 "items": [
@@ -249,6 +249,12 @@ class ComputeClient:
         instances = self.list_instances()
         json = format_json(request_json, instances)
         return merge_two_dicts(json, format_url(_config, instances))
+
+    def get_config_scripts(self):
+        return {
+            'app-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_app.sh"',
+            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_kafka_related.sh"'
+        }
 
 
 def format_json(request_json, items):

@@ -6,6 +6,7 @@ from flask_cors import CORS
 from gcloud.compute_client import ComputeClient
 from gcloud.dataproc_client import DataprocClient
 from others.mongo_client import MongoClient
+from others.ssh_client import SSHClient
 
 app = Flask(__name__)
 CORS(app)
@@ -38,8 +39,9 @@ def provision_vms():
     mongo_client = MongoClient("mongodb://localhost")
     mongo_client.save_record(res)
 
-    #run scripts inside of server
-
+    # run scripts inside of server
+    ssh_client = SSHClient()
+    ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
 
 
 @app.route('/realtime/gcloud/destroy', methods=['POST'])
