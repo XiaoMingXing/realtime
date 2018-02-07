@@ -4,11 +4,32 @@ import time
 import googleapiclient.discovery
 
 
+class Handlers:
+    def __init__(self):
+        pass
+
+    def get_mongo_url(self, **args):
+        return {"mongo_url": "mongodb://{}:27017/local".format(args["public_ip"])}
+
+    def get_kafka_url(self, **args):
+        return {
+            "kafka_broker_url": "http://{}:9092".format(args["public_ip"]),
+            "kafka_sink_topic": "sink-topic",
+            "kafka_source_topic": "topic-test2"
+        }
+
+    def get_kafka_connector_url(self, **args):
+        return {
+            "kafka_rest_url": "http://{}:8082".format(args["public_ip"])
+        }
+
+
 class ComputeClient:
     def __init__(self, options):
         self.project = options["project"]
         self.region = options["region"]
         self.zone = options["zone"]
+        self.config = {}
         pass
 
     def get_client(self):
@@ -44,30 +65,29 @@ class ComputeClient:
             os.path.join(
                 os.path.dirname(__file__), 'startup-script.sh'), 'r').read()
         config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
-        res = self.create_instance(config)
-        print(res)
+        self.create_instance(config)
 
     def provision_connector_vm(self):
         instance_name = "kafka-connector-instance"
         ami_name = "realtime-connectors"
         startup_script = 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_kafka_related.sh"'
         config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
-        res = self.create_instance(config)
-        print(res)
+        self.create_instance(config)
 
     def provision_mongo_vm(self):
         instance_name = "mongo-instance"
         container_name = "mongo"
         config = self.get_container_config(instance_name, container_name)
-        res = self.create_instance(config)
-        print(res)
+        self.create_instance(config)
 
     def provision_kafka_vm(self):
         instance_name = "kafka-instance"
         container_name = "spotify/kafka"
         config = self.get_container_config(instance_name, container_name)
-        res = self.create_instance(config)
-        print(res)
+        self.create_instance(config)
+
+    def describe_instance_ip(self, res):
+        return
 
     def get_machine_type(self):
         return "projects/{}/zones/{}/machineTypes/n1-standard-1".format(self.project, self.zone)
@@ -195,13 +215,40 @@ class ComputeClient:
         result = self.get_client().instances().list(project=self.project, zone=self.zone).execute()
         return result.get('items', None)
 
+    def get_instance(self, instance_name):
+        return self.get_client().instances().get(
+            project=self.project,
+            zone=self.zone,
+            instance=instance_name).execute()
+
+    def delete_instance(self, instance_name):
+        print("[VM] deleting instance {}".format(instance_name))
+        return self.get_client().instances().delete(
+            project=self.project,
+            zone=self.zone,
+            instance=instance_name).execute()
+
+    def delete_instances(self, instance_names):
+        for instance_name in instance_names:
+            self.delete_instance(instance_name)
+
     def provision_vms(self):
-        request_json = {"project": self.project, "region": self.region, "zone": self.zone}
         self.provision_mongo_vm()
-        # self.provision_kafka_vm()
+        self.provision_kafka_vm()
         self.provision_app_vm()
-        # self.provision_connector_vm()
-        return format_json(request_json, self.list_instances())
+        self.provision_connector_vm()
+
+    def get_config_urls(self):
+        request_json = {"project": self.project, "region": self.region, "zone": self.zone}
+        _handlers = Handlers()
+        _config = {
+            "mongo-instance": _handlers.get_mongo_url,
+            "kafka-instance": _handlers.get_kafka_url,
+            "kafka-connector-instance": _handlers.get_kafka_connector_url
+        }
+        instances = self.list_instances()
+        json = format_json(request_json, instances)
+        return merge_two_dicts(json, format_url(_config, instances))
 
 
 def format_json(request_json, items):
@@ -222,13 +269,41 @@ def format_json(request_json, items):
     return request_json
 
 
+def merge_two_dicts(dict1, dict2):
+    res = dict1.copy()  # start with x's keys and values
+    res.update(dict2)  # modifies res with y's keys and values & returns None
+    return res
+
+
+def format_url(handlers, items):
+    if items is None or len(items) is 0:
+        return
+    res = {}
+    for item in items:
+        public_ip = item["networkInterfaces"][0]["accessConfigs"][0]["natIP"]
+        private_ip = item["networkInterfaces"][0]["networkIP"]
+        handler = handlers.get(item.get("name", ""), None)
+        if not handler is None:
+            config = handler(public_ip=public_ip, private_ip=private_ip)
+            res = merge_two_dicts(res, config)
+    return res
+
+
 if __name__ == '__main__':
     project = "tw-data-engineering-demo"
     region = "asia-southeast1"
     zone = "asia-southeast1-b"
-
     request_json = {"project": project, "region": region, "zone": zone}
+
     compute_client = ComputeClient(request_json)
-    compute_client.provision_vms()
-    items = compute_client.list_instances()
-    res = format_json(request_json, items)
+    # compute_client.provision_vms()
+
+    handlers = Handlers()
+    config = {
+        "mongo-instance": handlers.get_mongo_url,
+        "kafka-instance": handlers.get_kafka_url,
+        "kafka-connector-instance": handlers.get_kafka_connector_url
+    }
+
+    res = format_url(config, compute_client.list_instances())
+    print(res)

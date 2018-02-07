@@ -14,6 +14,9 @@ class MongoClient:
     def save_record(self, record):
         self.collection.update({'_id': record['_id']}, record, True)
 
+    def find_one(self, filter):
+        return self.collection.find_one(filter)
+
 
 if __name__ == '__main__':
     mongo_client = MongoClient("mongodb://localhost")
