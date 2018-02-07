@@ -18,6 +18,8 @@ prepare(){
 update_repo(){
    cd ${PROJECT_HOME}
    git pull
+
+   python realtime-automation/scripts/automate.py
 }
 
 run_buz_sys(){

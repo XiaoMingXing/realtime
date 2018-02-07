@@ -27,25 +27,24 @@ def delete_cluster():
     return json.dumps(res)
 
 
+@app.route('/realtime/gcloud/setup', methods=['POST'])
 def provision_vms():
-    project = "tw-data-engineering-demo"
-    region = "asia-southeast1"
-    zone = "asia-southeast1-b"
-
-    request_json = {"project": project, "region": region, "zone": zone}
-    compute_client = ComputeClient(request_json)
-    # compute_client.provision_vms()
+    req_data = request.get_json()
+    compute_client = ComputeClient(req_data)
+    compute_client.provision_vms()
     res = compute_client.get_config_urls()
-    res["_id"] = "customer3"
 
     # save data into mongoDB
     mongo_client = MongoClient("mongodb://localhost")
     mongo_client.save_record(res)
 
 
+@app.route('/realtime/gcloud/destroy', methods=['POST'])
 def destroy_vms():
+    request_json = request.get_json()
+
     mongo_client = MongoClient("mongodb://localhost")
-    query = {"_id": "customer3"}
+    query = {"_id": request_json.get("customer")}
     record = mongo_client.find_one(query)
     if record is None:
         return
@@ -54,16 +53,9 @@ def destroy_vms():
     for server in record.get("servers"):
         instance_names.append(server.get("name"))
 
-    project = "tw-data-engineering-demo"
-    region = "asia-southeast1"
-    zone = "asia-southeast1-b"
-
-    request_json = {"project": project, "region": region, "zone": zone}
     compute_client = ComputeClient(request_json)
-
     compute_client.delete_instances(instance_names=instance_names)
 
 
 if __name__ == '__main__':
-    # app.run(host='127.0.0.1', port=9090, debug=True)
-    destroy_vms()
+    app.run(host='127.0.0.1', port=9090, debug=True)

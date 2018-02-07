@@ -7,9 +7,12 @@ export CONFLUENT_HOME=~/projects/confluent-4.0.0
 prepare(){
     cd ${PROJECT_HOME}
     git pull
+
+    python realtime-automation/scripts/automate.py
 }
 
-#start confluent kafka rest
+#start confluent kafk
+a rest
 run_kafka_rest(){
      echo "Run Kafka Rest ..."
      cd ${PROJECT_HOME}
