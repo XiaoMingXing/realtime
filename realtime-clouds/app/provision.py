@@ -32,16 +32,18 @@ def delete_cluster():
 def provision_vms():
     req_data = request.get_json()
     compute_client = ComputeClient(req_data)
-    compute_client.provision_vms()
+    # compute_client.provision_vms()
     res = compute_client.get_config_urls()
 
     # save data into mongoDB
     mongo_client = MongoClient("mongodb://localhost")
-    mongo_client.save_record(res)
+    res["_id"] = req_data["customer"]
+    # mongo_client.save_record(res)
 
     # run scripts inside of server
     ssh_client = SSHClient()
     ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
+    return "success"
 
 
 @app.route('/realtime/gcloud/destroy', methods=['POST'])
@@ -60,6 +62,7 @@ def destroy_vms():
 
     compute_client = ComputeClient(request_json)
     compute_client.delete_instances(instance_names=instance_names)
+    return "success"
 
 
 if __name__ == '__main__':

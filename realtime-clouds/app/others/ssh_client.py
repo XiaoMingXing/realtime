@@ -7,10 +7,12 @@ class SSHClient:
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     def run_command(self, hostname, command):
-        self.ssh.connect(hostname=hostname)
-        stdin, stdout, stderr = self.ssh.exec_command(command=command)
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=hostname)
+        stdin, stdout, stderr = ssh.exec_command(command=command)
         print(stdout.read())
-        self.ssh.close()
+        ssh.close()
 
     def run_scripts(self, servers, scripts):
         if servers is None:

@@ -43,8 +43,8 @@ class ComputeClient:
                 zone=self.zone,
                 operation=operation).execute()
 
-            if result['status'] == '{} Create done!'.format(instance_name):
-                print("done.")
+            if result['status'] == 'DONE':
+                print("{} create done.".format(instance_name))
                 if 'error' in result:
                     raise Exception(result['error'])
                 return result

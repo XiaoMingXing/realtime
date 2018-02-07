@@ -11,7 +11,6 @@ CORS(app)
 
 @app.route('/config/<string:env>', methods=['GET'])
 def get_config(env):
-    print env
     res = AutoRealtimeGCloud("mongodb://localhost").get_config(env)
     return json.dumps(res)
 
