@@ -38,6 +38,9 @@ def provision_vms():
     mongo_client = MongoClient("mongodb://localhost")
     mongo_client.save_record(res)
 
+    #run scripts inside of server
+
+
 
 @app.route('/realtime/gcloud/destroy', methods=['POST'])
 def destroy_vms():

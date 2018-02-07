@@ -29,7 +29,6 @@ run_kafka_streams(){
 }
 
 
-
 # Run kafka connector
 run_kafka_connector(){
     echo "Run Kafka Connector ..."
