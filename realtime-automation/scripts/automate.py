@@ -5,10 +5,11 @@ import urllib2
 
 ignore_list = [".*", "node_modules", "target", "bower_components"]
 config_file_pattern = "*config.properties"
+config_manage_get = "http://35.197.153.3:80/config/local"
 
 
 def get_remote_config():
-    res = urllib2.urlopen("http://127.0.0.1:9999/config/local").read()
+    res = urllib2.urlopen("%s" % config_manage_get).read()
     return json.loads(res)
 
 

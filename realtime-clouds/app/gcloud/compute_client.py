@@ -247,6 +247,8 @@ class ComputeClient:
             "kafka-connector-instance": _handlers.get_kafka_connector_url
         }
         instances = self.list_instances()
+        if instances is None:
+            return instances
         json = format_json(request_json, instances)
         return merge_two_dicts(json, format_url(_config, instances))
 
