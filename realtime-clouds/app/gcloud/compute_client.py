@@ -50,13 +50,24 @@ class ComputeClient:
                 return result
             time.sleep(1)
 
+    def wait_for_operations(self, operation_instance):
+        if operation_instance is None:
+            return
+        for operation in operation_instance.keys():
+            self.wait_for_operation(operation, operation_instance.get(operation))
+
     def create_instance(self, config):
+        instance = self.get_instance(config.get("name"))
+        if instance:
+            return None
         # Configure the machine
         res = self.get_client().instances().insert(
             project=self.project,
             zone=self.zone,
             body=config).execute()
-        return self.wait_for_operation(res["name"], config.get("name", None))
+        return {
+            res["name"]: config["name"]
+        }
 
     def provision_app_vm(self):
         instance_name = "app-instance"
@@ -65,26 +76,26 @@ class ComputeClient:
             os.path.join(
                 os.path.dirname(__file__), 'startup-script.sh'), 'r').read()
         config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
-        self.create_instance(config)
+        return self.create_instance(config)
 
     def provision_connector_vm(self):
         instance_name = "kafka-connector-instance"
         ami_name = "realtime-connectors"
         startup_script = 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_kafka_related.sh"'
         config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
-        self.create_instance(config)
+        return self.create_instance(config)
 
     def provision_mongo_vm(self):
         instance_name = "mongo-instance"
         container_name = "mongo"
         config = self.get_container_config(instance_name, container_name)
-        self.create_instance(config)
+        return self.create_instance(config)
 
     def provision_kafka_vm(self):
         instance_name = "kafka-instance"
         container_name = "spotify/kafka"
         config = self.get_container_config(instance_name, container_name)
-        self.create_instance(config)
+        return self.create_instance(config)
 
     def describe_instance_ip(self, res):
         return
@@ -228,10 +239,11 @@ class ComputeClient:
             self.delete_instance(instance_name)
 
     def provision_vms(self):
-        self.provision_mongo_vm()
-        self.provision_kafka_vm()
-        self.provision_app_vm()
-        self.provision_connector_vm()
+        operation_instance = self.provision_mongo_vm()
+        operation_instance = merge_two_dicts(operation_instance, self.provision_kafka_vm())
+        operation_instance = merge_two_dicts(operation_instance, self.provision_app_vm())
+        operation_instance = merge_two_dicts(operation_instance, self.provision_connector_vm())
+        self.wait_for_operations(operation_instance)
 
     def get_config_urls(self):
         request_json = {"project": self.project, "region": self.region, "zone": self.zone}
@@ -273,9 +285,10 @@ def format_json(request_json, items):
 
 
 def merge_two_dicts(dict1, dict2):
-    res = dict1.copy()  # start with x's keys and values
-    res.update(dict2)  # modifies res with y's keys and values & returns None
-    return res
+    if dict1 is not None and dict2 is not None:
+        res = dict1.copy()  # start with x's keys and values
+        res.update(dict2)  # modifies res with y's keys and values & returns None
+        return res
 
 
 def format_url(handlers, items):

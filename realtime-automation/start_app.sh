@@ -41,7 +41,8 @@ run_node_app(){
 run_dashboard(){
     echo "Run Dashboard ..."
     cd ${PROJECT_HOME}/realtime-dashboard
-    npm run dev -- -p 3001 &
+    npm run build
+    npm run start
 }
 
 
