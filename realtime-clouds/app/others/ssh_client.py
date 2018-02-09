@@ -10,14 +10,36 @@ class ScriptThread(threading.Thread):
         self.hostname = hostname
         self.command = command
 
+        self.ssh = paramiko.SSHClient()
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
     def run_command(self):
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname=self.hostname)
+        self.ssh.connect(hostname=self.hostname)
         print 'execute in %s: %s' % (self.hostname, self.command)
-        stdin, stdout, stderr = ssh.exec_command(command=self.command)
-        print(stdout.read())
-        ssh.close()
+        self.send_command(command=self.command)
+        self.ssh.close()
+
+    def send_command(self, command):
+        # Check if connection is made previously
+        if (self.ssh):
+            stdin, stdout, stderr = self.ssh.exec_command(command)
+            while not stdout.channel.exit_status_ready():
+                # Print stdout data when available
+                if stdout.channel.recv_ready():
+                    # Retrieve the first 1024 bytes
+                    alldata = stdout.channel.recv(1024)
+                    while stdout.channel.recv_ready():
+                        # Retrieve the next 1024 bytes
+                        alldata += stdout.channel.recv(1024)
+
+                    # Print as string with utf8 encoding
+                    print(str(alldata))
+            # Cleanup
+            stdin.close()
+            stdout.close()
+            stderr.close()
+        else:
+            print("Connection not opened.")
 
     def run(self):
         print 'Current %s is running...' % threading.current_thread().name
