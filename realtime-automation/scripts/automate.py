@@ -1,6 +1,5 @@
 import fnmatch
 import json
-import logging
 import os
 import urllib2
 
@@ -97,8 +96,8 @@ if __name__ == '__main__':
     }
 
     config_remote = get_remote_config("customer5")
-    logging.info("[Automation] The config from remote: ", config_remote)
+    print("[Automation] The config from remote: ", config_remote)
     for key in config_fn.keys():
         config_file = find_config_files(key)
-        logging.info("[Automation] The file which need to do the change: ", config_file)
+        print("[Automation] The file which need to do the change: ", config_file)
         change_config(config_remote, config_file, config_fn[key])
