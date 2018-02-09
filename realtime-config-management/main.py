@@ -9,7 +9,7 @@ from realtime.gcloud_pipeline_config import AutoRealtimeGCloud
 app = Flask(__name__)
 CORS(app)
 
-mongo_url = "mongodb://35.187.224.216:27017"
+mongo_url = "mongodb://35.187.230.101:27017"
 
 
 @app.route('/config/<string:env>', methods=['GET'])

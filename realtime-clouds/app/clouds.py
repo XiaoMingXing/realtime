@@ -11,8 +11,6 @@ from service.config_manage_client import ConfigManagementClient
 app = Flask(__name__)
 CORS(app)
 
-mongo_url = "mongodb://35.187.224.216:27017"
-
 
 @app.route('/provision_cluster', methods=['POST'])
 def provision_cluster():
@@ -34,7 +32,7 @@ def delete_cluster():
 def provision_vms():
     req_data = request.get_json()
     compute_client = ComputeClient(req_data)
-    # compute_client.provision_vms()
+    compute_client.provision_vms()
     res = compute_client.get_config_urls()
 
     # save data into config management system
