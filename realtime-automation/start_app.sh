@@ -18,11 +18,6 @@ prepare(){
 update_repo(){
    cd ${PROJECT_HOME}
    git pull
-
-   sudo apt-get install python-setuptools python-dev build-essential
-   sudo easy_install pip
-   pip install scripts/requirements.txt
-   python scripts/automate.py
 }
 
 run_buz_sys(){

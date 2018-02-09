@@ -1,4 +1,1 @@
-fnmatch
-json
-os
-urllib2
+jproperties==1.0.1

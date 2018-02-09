@@ -10,8 +10,9 @@ prepare(){
 
     sudo apt-get install python-setuptools python-dev build-essential
     sudo easy_install pip
-    pip install scripts/requirements.txt
-    python scripts/automate.py
+    cd scripts
+    pip install requirements.txt
+    python automate.py
 }
 
 #start confluent kafk
