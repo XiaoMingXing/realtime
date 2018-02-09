@@ -39,7 +39,7 @@ run_kafka_connector(){
     mvn clean package
 
     #run the connector
-    ${CONFLUENT_HOME}/bin/connect-standalone config/worker-config.properties config/connect-config.properties
+    ${CONFLUENT_HOME}/bin/connect-standalone config/worker-config.properties config/connect-config.properties &
 }
 
 prepare
@@ -47,3 +47,5 @@ prepare
 run_kafka_rest
 run_kafka_streams
 run_kafka_connector
+
+exit

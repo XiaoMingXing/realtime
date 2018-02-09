@@ -50,3 +50,5 @@ update_repo
 run_buz_sys
 run_node_app
 run_dashboard
+
+exit

@@ -1,22 +1,15 @@
-import threading
-from random import randint
-
 import paramiko
 
 
-class ScriptThread(threading.Thread):
-    def __init__(self, name, hostname, command):
-        threading.Thread.__init__(self, name=name)
-        self.hostname = hostname
-        self.command = command
-
+class ScriptRunner():
+    def __init__(self, ):
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    def run_command(self):
-        self.ssh.connect(hostname=self.hostname)
-        print 'execute in %s: %s' % (self.hostname, self.command)
-        self.send_command(command=self.command)
+    def run_command(self, hostname, command):
+        self.ssh.connect(hostname=hostname)
+        print 'execute in %s: %s' % (hostname, command)
+        self.send_command(command=command)
         self.ssh.close()
 
     def send_command(self, command):
@@ -41,10 +34,6 @@ class ScriptThread(threading.Thread):
         else:
             print("Connection not opened.")
 
-    def run(self):
-        print 'Current %s is running...' % threading.current_thread().name
-        self.run_command()
-
 
 class SSHClient:
     def __init__(self):
@@ -53,29 +42,21 @@ class SSHClient:
     def run_scripts(self, servers, scripts):
         if servers is None:
             return
+        script_runner = ScriptRunner()
         for server in servers:
             hostname = server.get("public_ip")
             instance_name = server.get("name")
             command = scripts.get(instance_name)
             if command is not None:
-                _script_thread = ScriptThread(name="Thread_{}".format(randint(1, len(servers))),
-                                              hostname=hostname,
-                                              command=command)
-                _script_thread.start()
-                _script_thread.join()
-                print("%s ended. " % threading.current_thread().name)
+                script_runner.run_command(hostname=hostname, command=command)
 
 
 if __name__ == '__main__':
-    hostname = "35.185.184.76"
-    hostname2 = "35.185.176.184"
+    hostname = "35.197.154.212"
+    hostname2 = "35.185.184.76"
     command = "sudo -u mxxiao -H sh -c 'cd ~/projects/realtime/realtime-automation; ./start_app.sh'"
     command2 = "sudo -u mxxiao -H sh -c \"cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh\""
-    t1 = ScriptThread(name="Thread_1", hostname=hostname, command=command)
-    t2 = ScriptThread(name="Thread_2", hostname=hostname2, command=command2)
 
-    t1.start()
-    t2.start()
-
-    t1.join()
-    t2.join()
+    script_runner = ScriptRunner()
+    script_runner.run_command(hostname, command)
+    script_runner.run_command(hostname2, command2)
