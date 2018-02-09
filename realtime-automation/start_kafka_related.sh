@@ -5,8 +5,11 @@ export PROJECT_HOME=~/projects/realtime
 export CONFLUENT_HOME=~/projects/confluent-4.0.0
 
 prepare(){
-    cd ${PROJECT_HOME}/realtime-automation
-    git pull
+
+    cd ~/projects
+    rm -rf realtime
+    git clone git@github.com:XiaoMingXing/realtime.git
+    cd realtime/realtime-automation
 
     python scripts/automate.py
 }

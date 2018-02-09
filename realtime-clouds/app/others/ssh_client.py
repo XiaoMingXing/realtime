@@ -1,5 +1,5 @@
 import threading
-import uuid
+from random import randint
 
 import paramiko
 
@@ -36,7 +36,8 @@ class SSHClient:
             instance_name = server.get("name")
             command = scripts.get(instance_name)
             if command is not None:
-                _script_thread = ScriptThread(name="Thread_{}".format(uuid.uuid4().hex), hostname=hostname,
+                _script_thread = ScriptThread(name="Thread_{}".format(randint(1, len(servers))),
+                                              hostname=hostname,
                                               command=command)
                 _script_thread.start()
                 _script_thread.join()
