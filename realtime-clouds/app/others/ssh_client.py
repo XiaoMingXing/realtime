@@ -1,10 +1,11 @@
+import threading
+
 import paramiko
 
 
 class SSHClient:
     def __init__(self):
-        self.ssh = paramiko.SSHClient()
-        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        pass
 
     def run_command(self, hostname, command):
         ssh = paramiko.SSHClient()
@@ -21,7 +22,11 @@ class SSHClient:
             hostname = server.get("public_ip")
             instance_name = server.get("name")
             command = scripts.get(instance_name)
-            self.run_command(hostname, command)
+            thread = threading.Thread(target=self.run_command, name="[Thread new] run: ".format(instance_name),
+                                      args=(hostname, command))
+            thread.start()
+            thread.join()
+            print("%s ended. " % threading.current_thread().name)
 
 
 if __name__ == '__main__':
