@@ -21,7 +21,7 @@ app.use(function (req, res, next) {
 });
 let http = require('http').Server(app);
 let io = require('socket.io');
-http.listen(8089, "localhost", function (err, res) {
+http.listen(8089, "35.198.250.50", function (err, res) {
     console.log('Express server listening on port ' + 8089);
 });
 let socket = io.listen(http);

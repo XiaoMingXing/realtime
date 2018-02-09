@@ -22,6 +22,7 @@ class SSHClient:
             hostname = server.get("public_ip")
             instance_name = server.get("name")
             command = scripts.get(instance_name)
+            print("Running script: %s" % command)
             thread = threading.Thread(target=self.run_command, name="[Thread new] run: ".format(instance_name),
                                       args=(hostname, command))
             thread.start()
