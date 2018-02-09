@@ -26,7 +26,8 @@ class UserActivity extends Component {
                 }]
             }),
             infoMsg: '',
-            consumedMessage: []
+            consumedMessage: [],
+            kafkaRest: ""
         };
 
         let _this = this;
@@ -34,7 +35,7 @@ class UserActivity extends Component {
             .then(function (config) {
                 console.log(config);
                 if (config.status === 200) {
-                    _this.KAFKA_REST = config.data["kafka_rest_url"];
+                    _this.state.kafkaRest = config.data["kafka_rest_url"];
                 }
             });
 
@@ -51,7 +52,7 @@ class UserActivity extends Component {
     checkKafkaTopics() {
         let _this = this;
         axios
-            .get(this.KAFKA_REST + "topics")
+            .get(this.state.kafkaRest + "/topics")
             .then(result => {
                 if (result.status !== 200) {
                     this.errorMessage = "Kafka connection error!";
@@ -64,8 +65,8 @@ class UserActivity extends Component {
     initKafka() {
 
         let _this = this;
-
-        axios.post(this.KAFKA_REST + "consumers/" + this.CONSUMER_NAME, JSON.stringify({
+        console.log(this.state.kafkaRest);
+        axios.post(this.state.kafkaRest + "/consumers/" + this.CONSUMER_NAME, JSON.stringify({
             "name": this.CONSUMER_INSTANCE_NAME,
             "format": "json",
             "auto.offset.reset": "latest"
@@ -88,7 +89,7 @@ class UserActivity extends Component {
             return
         }
         let message = JSON.parse(this.state.message);
-        axios.post(this.KAFKA_REST + "topics/" + this.TOPICS, JSON.stringify(message))
+        axios.post(this.state.kafkaRest + "/topics/" + this.TOPICS, JSON.stringify(message))
             .then(result => console.log(result))
     }
 
@@ -100,7 +101,7 @@ class UserActivity extends Component {
             }
         };
         axios
-            .get(this.KAFKA_REST + "consumers/" + this.CONSUMER_NAME + "/instances/" +
+            .get(this.state.kafkaRest + "/consumers/" + this.CONSUMER_NAME + "/instances/" +
                 this.CONSUMER_INSTANCE_NAME + "/records", headerConfig)
             .then(result => _this.setState({consumedMessage: result.data}))
     }
