@@ -47,5 +47,4 @@ prepare
 run_kafka_rest
 run_kafka_streams
 run_kafka_connector
-
-exit
+exit 0
