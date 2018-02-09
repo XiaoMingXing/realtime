@@ -39,8 +39,9 @@ def copy_exist(write_props, read_props):
 
 
 def find_config_files(key):
-    configs = search_config_files(dirname(dirname(os.getcwd())), "realtime", config_file_pattern, 0)
-
+    configs = search_config_files(dirname(os.getcwd()), "realtime", config_file_pattern, 0)
+    print("All the configs: ", configs)
+    print("Project Home: ", dirname(os.getcwd()))
     for config in configs:
         file_name = config[config.rfind("/") + 1:len(config) - 1]
         if file_name.startswith(key):
@@ -58,7 +59,7 @@ def will_ignore(file_path):
 
 def search_config_files(file_path, file_name, pattern, level):
     match_files = []
-    if will_ignore(file_name) or level > 3:
+    if will_ignore(file_name) or level > 5:
         return match_files
     if os.path.isfile(file_path) and fnmatch.fnmatch(file_name, pattern):
         match_files.append(file_path)
