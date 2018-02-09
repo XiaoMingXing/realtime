@@ -1,4 +1,3 @@
-import os
 import time
 
 import googleapiclient.discovery
@@ -57,32 +56,27 @@ class ComputeClient:
             self.wait_for_operation(operation, operation_instance.get(operation))
 
     def create_instance(self, config):
-        instance = self.get_instance(config.get("name"))
-        if instance:
-            return None
-        # Configure the machine
-        res = self.get_client().instances().insert(
-            project=self.project,
-            zone=self.zone,
-            body=config).execute()
-        return {
-            res["name"]: config["name"]
-        }
+        try:
+            self.get_instance(config.get("name"))
+        except:
+            res = self.get_client().instances().insert(
+                project=self.project,
+                zone=self.zone,
+                body=config).execute()
+            return {
+                res["name"]: config["name"]
+            }
 
     def provision_app_vm(self):
         instance_name = "app-instance"
         ami_name = "realtime-app-ami-v2"
-        startup_script = open(
-            os.path.join(
-                os.path.dirname(__file__), 'startup-script.sh'), 'r').read()
-        config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
+        config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
     def provision_connector_vm(self):
         instance_name = "kafka-connector-instance"
         ami_name = "realtime-connectors"
-        startup_script = 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_kafka_related.sh"'
-        config = self.get_ami_instance_config(instance_name, ami_name, startup_script)
+        config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
     def provision_mongo_vm(self):
@@ -177,7 +171,7 @@ class ComputeClient:
             "serviceAccounts": self.get_service_accounts()
         }
 
-    def get_ami_instance_config(self, instance_name, ami_name, startup_script):
+    def get_ami_instance_config(self, instance_name, ami_name):
         return {
             'name': instance_name,
 
@@ -261,8 +255,8 @@ class ComputeClient:
 
     def get_config_scripts(self):
         return {
-            'app-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_app.sh"',
-            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; git pull; ./start_kafka_related.sh"'
+            'app-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_app.sh"',
+            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"'
         }
 
 

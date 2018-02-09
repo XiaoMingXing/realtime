@@ -1,7 +1,10 @@
 import fnmatch
 import json
+import logging
 import os
 import urllib2
+
+from os.path import dirname
 
 ignore_list = [".*", "node_modules", "target", "bower_components"]
 config_file_pattern = "*config.properties"
@@ -18,6 +21,8 @@ def change_config(config_remote, config_file, fn):
     read_props = Properties()
     write_props = Properties()
 
+    if config_file is None:
+        return
     with open(config_file, "r") as file:
         read_props.load(file)
     write_props = copy_exist(write_props, read_props)
@@ -35,7 +40,7 @@ def copy_exist(write_props, read_props):
 
 
 def find_config_files(key):
-    configs = search_config_files(os.environ['PROJECT_HOME'], "realtime", config_file_pattern, 0)
+    configs = search_config_files(dirname(dirname(os.getcwd())), "realtime", config_file_pattern, 0)
 
     for config in configs:
         file_name = config[config.rfind("/") + 1:len(config) - 1]
@@ -92,6 +97,8 @@ if __name__ == '__main__':
     }
 
     config_remote = get_remote_config("customer5")
+    logging.info("[Automation] The config from remote: ", config_remote)
     for key in config_fn.keys():
         config_file = find_config_files(key)
+        logging.info("[Automation] The file which need to do the change: ", config_file)
         change_config(config_remote, config_file, config_fn[key])
