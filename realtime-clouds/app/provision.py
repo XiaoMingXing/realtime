@@ -6,6 +6,7 @@ from flask_cors import CORS
 from gcloud.compute_client import ComputeClient
 from gcloud.dataproc_client import DataprocClient
 from others.mongo_client import MongoClient
+from others.ssh_client import SSHClient
 from service.config_manage_client import ConfigManagementClient
 
 app = Flask(__name__)
@@ -34,7 +35,7 @@ def delete_cluster():
 def provision_vms():
     req_data = request.get_json()
     compute_client = ComputeClient(req_data)
-    # compute_client.provision_vms()
+    compute_client.provision_vms()
     res = compute_client.get_config_urls()
 
     # save data into config management system
@@ -43,8 +44,8 @@ def provision_vms():
     config_manage.save(res)
 
     # run scripts inside of server
-    # ssh_client = SSHClient()
-    # ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
+    ssh_client = SSHClient()
+    ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
     return "success"
 
 

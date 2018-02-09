@@ -5,11 +5,11 @@ import urllib2
 
 ignore_list = [".*", "node_modules", "target", "bower_components"]
 config_file_pattern = "*config.properties"
-config_manage_get = "http://35.197.153.3:80/config/local"
+config_manage_get = "http://35.197.153.3:9000/config"
 
 
-def get_remote_config():
-    res = urllib2.urlopen("%s" % config_manage_get).read()
+def get_remote_config(customer_id):
+    res = urllib2.urlopen("{}/{}".format(config_manage_get, customer_id)).read()
     return json.loads(res)
 
 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         "worker": config_worker,
     }
 
-    config_remote = get_remote_config()
+    config_remote = get_remote_config("customer5")
     for key in config_fn.keys():
         config_file = find_config_files(key)
         change_config(config_remote, config_file, config_fn[key])

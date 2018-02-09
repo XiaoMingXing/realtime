@@ -10,8 +10,8 @@ class AutoRealtimeGCloud:
     def find_records(self, customer):
         return self.collection.find({"_id": customer})
 
-    def get_config(self, env):
-        record = self.find_records("customer1")
+    def get_config(self, customer_id):
+        record = self.find_records(customer_id)
         return record[0]
 
 
