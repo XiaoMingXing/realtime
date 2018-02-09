@@ -20,13 +20,13 @@ app.use(function (req, res, next) {
     next();
 });
 let http = require('http').Server(app);
-let io = require('socket.io')(http);
-
-http.listen(8080, "35.198.201.186", function (err, res) {
+let io = require('socket.io');
+http.listen(8080, "localhost", function (err, res) {
     console.log('Express server listening on port ' + 8080);
 });
+let socket = io.listen(http);
 
-io.on('connection', function (socket) {
+socket.on('connection', function (socket) {
     console.log("websocket connected from client");
     let dashboardService = require('./services/dashboardService');
     dashboardService.totalPv(function (result) {
