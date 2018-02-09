@@ -8,11 +8,7 @@ prepare(){
     cd ${PROJECT_HOME}
     git pull
 
-    sudo apt-get install python-setuptools python-dev build-essential
-    sudo easy_install pip
-    cd scripts
-    pip install requirements.txt
-    python automate.py
+    python realtime-automation/scripts/automate.py
 }
 
 #start confluent kafk
