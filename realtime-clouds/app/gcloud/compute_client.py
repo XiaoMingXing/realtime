@@ -195,14 +195,9 @@ class ComputeClient:
 
             # Metadata is readable from the instance and allows you to
             # pass configuration from deployment scripts to instances.
-            # "metadata": {
-            #     "items": [{
-            #         # Startup script is automatically executed by the
-            #         # instance upon startup.
-            #         'key': 'startup-script',
-            #         'value': startup_script
-            #     }, self.get_ssh_key()]
-            # },
+            "metadata": {
+                "items": [self.get_ssh_key()]
+            },
 
             "tags": {
                 "items": [

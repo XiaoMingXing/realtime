@@ -5,7 +5,6 @@ from flask_cors import CORS
 
 from gcloud.compute_client import ComputeClient
 from gcloud.dataproc_client import DataprocClient
-from others.mongo_client import MongoClient
 from others.ssh_client import SSHClient
 from service.config_manage_client import ConfigManagementClient
 
@@ -35,7 +34,7 @@ def delete_cluster():
 def provision_vms():
     req_data = request.get_json()
     compute_client = ComputeClient(req_data)
-    compute_client.provision_vms()
+    # compute_client.provision_vms()
     res = compute_client.get_config_urls()
 
     # save data into config management system
@@ -52,12 +51,8 @@ def provision_vms():
 @app.route('/realtime/gcloud/destroy', methods=['POST'])
 def destroy_vms():
     request_json = request.get_json()
-
-    mongo_client = MongoClient(mongo_url)
-    query = {"_id": request_json.get("customer")}
-    record = mongo_client.find_one(query)
-    if record is None:
-        return
+    config_manage = ConfigManagementClient()
+    record = config_manage.get_remote_config(request_json.get("customer"))
 
     instance_names = []
     for server in record.get("servers"):

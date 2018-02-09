@@ -6,8 +6,8 @@ class ConfigManagementClient:
         self.config_manage_url = "http://35.197.153.3:9000"
         pass
 
-    def get_remote_config(self):
-        res = requests.get("{}/config/local".format(self.config_manage_url))
+    def get_remote_config(self, customer):
+        res = requests.get("{}/config/{}".format(self.config_manage_url, customer))
         return res.json()
 
     def save(self, record):
