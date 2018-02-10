@@ -1,5 +1,3 @@
-import json
-
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -14,8 +12,7 @@ mongo_url = "mongodb://35.187.230.101:27017"
 
 @app.route('/config/<string:env>', methods=['GET'])
 def get_config(env):
-    res = AutoRealtimeGCloud("%s" % mongo_url).get_config(env)
-    return json.dumps(res)
+    return AutoRealtimeGCloud("%s" % mongo_url).get_config(env)
 
 
 @app.route('/config/save', methods=['POST'])

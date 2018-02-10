@@ -1,3 +1,5 @@
+from multiprocessing import Process
+
 import paramiko
 
 
@@ -47,8 +49,11 @@ class SSHClient:
             hostname = server.get("public_ip")
             instance_name = server.get("name")
             command = scripts.get(instance_name)
-            if command is not None:
-                script_runner.run_command(hostname=hostname, command=command)
+            if command is None:
+                continue
+            process = Process(target=script_runner.run_command, args=(hostname, command))
+            process.start()
+            process.join(timeout=60)
 
 
 if __name__ == '__main__':

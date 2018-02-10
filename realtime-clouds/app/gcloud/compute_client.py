@@ -248,6 +248,7 @@ class ComputeClient:
             "kafka-connector-instance": _handlers.get_kafka_connector_url
         }
         instances = self.list_instances()
+        instances = [instance for instance in instances if instance["status"] == "RUNNING"]
         if instances is None:
             return instances
         json = format_json(request_json, instances)
