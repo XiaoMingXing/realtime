@@ -18,6 +18,12 @@ def get_config(customer):
     return json.dumps(record)
 
 
+@app.route('/config/<customer_id>', methods=['DELETE'])
+def delete_config(customer_id):
+    AutoRealtimeGCloud("%s" % mongo_url).delete_config(customer_id)
+    return "success"
+
+
 @app.route('/config/save', methods=['POST'])
 def save_config():
     req_data = request.get_json()

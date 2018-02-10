@@ -34,3 +34,7 @@ class ConfigManagementClient:
                 result["kafka_broker"] = "{}:9092".format(server.get("public_ip"))
 
         return result
+
+    def delete_remote_config(self, customer_id):
+        res = requests.delete("{}/config/{}".format(self.config_manage_url, customer_id))
+        return res

@@ -108,8 +108,8 @@ class UserActivity extends Component {
 
     topicList = function (topics) {
         if (!topics || !topics.length) return;
-        const listTopics = topics.map((topic) =>
-            <li>{topic}</li>
+        const listTopics = topics.map((topic, index) =>
+            <li key={index}>{topic}</li>
         );
         return (
             <ul>{listTopics}</ul>
@@ -122,8 +122,8 @@ class UserActivity extends Component {
 
     render() {
 
-        let topics = this.state.topics.map((topic) => {
-            return (<li>{topic}</li>)
+        let topics = this.state.topics.map((topic, index) => {
+            return (<li key={index} value={topic}>{topic}</li>)
         });
 
         let textAreaStyle = {

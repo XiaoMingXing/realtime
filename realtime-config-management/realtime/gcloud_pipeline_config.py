@@ -14,6 +14,10 @@ class AutoRealtimeGCloud:
         record = self.collection.find_one({"_id": customer_id})
         return record
 
+    def delete_config(self, customer_id):
+        res = self.collection.delete_one({"_id": customer_id})
+        return res
+
 
 if __name__ == '__main__':
     config = AutoRealtimeGCloud("mongodb://localhost").get_config("local")

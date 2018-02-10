@@ -60,6 +60,8 @@ def destroy_vms():
 
     compute_client = ComputeClient(request_json)
     compute_client.delete_instances(instance_names=instance_names)
+
+    config_manage.delete_remote_config(request_json.get("customer"))
     return "success"
 
 
