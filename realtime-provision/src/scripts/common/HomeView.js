@@ -25,7 +25,9 @@ class Main extends Component {
                 region: "asia-southeast1",
                 zone: "asia-southeast1-b",
                 customer: "customer5"
-            }
+            },
+            links: {},
+            loading: false
 
         }
     }
@@ -44,9 +46,13 @@ class Main extends Component {
     }
 
     setup() {
+        let _this = this;
+        this.setState({loading: true});
         axios.post("http://localhost:9090/realtime/gcloud/setup", this.state.realtime_req_body)
             .then(function (res) {
-                console.log(res);
+                if (res.status === 200) {
+                    _this.setState({links: res.data, loading: false});
+                }
             })
     }
 
@@ -59,6 +65,12 @@ class Main extends Component {
 
 
     render() {
+
+        let _this = this;
+        let content = Object.keys(_this.state.links).map(function (key) {
+            return <li><a href={_this.state.links[key]}>{key}</a></li>
+        });
+
         return (<div>
 
             <h1>Welcome to home page!</h1>
@@ -79,6 +91,12 @@ class Main extends Component {
                     Destroy
                 </button>
 
+            </div>
+
+            <div className="links">
+                <ul>
+                    {content}
+                </ul>
             </div>
 
         </div>);

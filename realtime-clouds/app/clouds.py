@@ -45,7 +45,7 @@ def provision_vms():
         ssh_client = SSHClient()
         ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
         print("vms not exist")
-    return links
+    return json.dumps(links)
 
 
 @app.route('/realtime/gcloud/destroy', methods=['POST'])

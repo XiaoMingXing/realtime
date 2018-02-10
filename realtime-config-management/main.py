@@ -19,11 +19,11 @@ def get_config(env):
 
 @app.route('/config/save', methods=['POST'])
 def save_config():
-    req_data = json.loads(request.get_json())
+    req_data = request.get_json()
     mongo_client = MongoClient(mongo_url)
     if req_data is not None:
-        return mongo_client.save_record(req_data)
-    return "request error"
+        res = mongo_client.save_record(req_data)
+    return json.dumps(res)
 
 
 @app.route('/config/test', methods=['GET'])
