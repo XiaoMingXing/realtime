@@ -260,6 +260,11 @@ class ComputeClient:
             'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"'
         }
 
+    def vms_exist(self):
+        instances = self.list_instances()
+        instances = [instance for instance in instances if instance["status"] == "RUNNING"]
+        return len(instances) > 0
+
 
 def format_json(request_json, items):
     if items is None or len(items) is 0:

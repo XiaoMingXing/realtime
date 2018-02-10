@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -17,7 +19,7 @@ def get_config(env):
 
 @app.route('/config/save', methods=['POST'])
 def save_config():
-    req_data = request.get_json()
+    req_data = json.loads(request.get_json())
     mongo_client = MongoClient(mongo_url)
     if req_data is not None:
         return mongo_client.save_record(req_data)
