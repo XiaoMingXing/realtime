@@ -238,6 +238,7 @@ class ComputeClient:
         operation_instance = merge_two_dicts(operation_instance, self.provision_app_vm())
         operation_instance = merge_two_dicts(operation_instance, self.provision_connector_vm())
         self.wait_for_operations(operation_instance)
+        return True
 
     def get_config_urls(self):
         request_json = {"project": self.project, "region": self.region, "zone": self.zone}

@@ -26,10 +26,19 @@ class Main extends Component {
                 zone: "asia-southeast1-b",
                 customer: "customer5"
             },
-            links: {},
+            links: {"default": "default"},
             loading: false
 
         }
+    }
+
+    componentDidMount() {
+        let _this = this;
+        let customer_id = _this.state.realtime_req_body["customer"];
+        axios.get("http://localhost:9090/realtime/links/" + customer_id)
+            .then(function (res) {
+                _this.setState({links: res.data});
+            })
     }
 
 
@@ -50,7 +59,8 @@ class Main extends Component {
         this.setState({loading: true});
         axios.post("http://localhost:9090/realtime/gcloud/setup", this.state.realtime_req_body)
             .then(function (res) {
-                return axios.get("http://localhost:9090/realtime/links/customer5")
+                let customer_id = _this.state.realtime_req_body["customer"];
+                return axios.get("http://localhost:9090/realtime/links/" + customer_id)
             })
             .then(function (res) {
                 _this.setState({links: res.data});
@@ -67,11 +77,7 @@ class Main extends Component {
 
     render() {
 
-        let _this = this;
-        let content = Object.keys(_this.state.links).map(function (key) {
-            return <li><a href={_this.state.links[key]}>{key}</a></li>
-        });
-
+        let links = this.state.links;
         return (<div>
 
             <h1>Welcome to home page!</h1>
@@ -96,7 +102,9 @@ class Main extends Component {
 
             <div className="links">
                 <ul>
-                    {content}
+                    {Object.keys(links).map(function (key, index) {
+                        return <li value={key} key={index}><a href={links[key]}>{key}</a></li>
+                    })}
                 </ul>
             </div>
 

@@ -32,16 +32,16 @@ def delete_cluster():
 def provision_vms():
     req_data = request.get_json()
     compute_client = ComputeClient(req_data)
-    compute_client.provision_vms()
+    not_exist = compute_client.provision_vms()
     res = compute_client.get_config_urls()
 
     # save data into config management system
     config_manage = ConfigManagementClient()
     res["_id"] = req_data["customer"]
-    res = config_manage.save(res)
+    config_manage.save(res)
 
     # run scripts inside of server
-    if not compute_client.vms_exist():
+    if not_exist:
         ssh_client = SSHClient()
         ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
         print("vms not exist")

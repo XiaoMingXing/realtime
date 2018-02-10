@@ -23,7 +23,7 @@ def save_config():
     req_data = request.get_json()
     mongo_client = MongoClient(mongo_url)
     if req_data is not None:
-        res = mongo_client.save_record(req_data)
+        res = mongo_client.save_record(json.loads(req_data))
         return json.dumps(res)
 
 

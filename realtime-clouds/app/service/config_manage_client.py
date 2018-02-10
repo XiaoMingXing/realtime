@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 
@@ -11,9 +13,9 @@ class ConfigManagementClient:
         return res.json()
 
     def save(self, record):
-        response = requests.post("{}/config/save".format(self.config_manage_url), json=record)
-        if response.status_code == 200:
-            return response
+        response = requests.post("{}/config/save".format(self.config_manage_url), json=json.dumps(record))
+        if response.status_code != 200:
+            raise Exception("save configuration error", response)
 
     def get_customer_links(self, customer):
         record = self.get_remote_config(customer)
