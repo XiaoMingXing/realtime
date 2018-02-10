@@ -13,11 +13,11 @@ class ConfigManagementClient:
     def save(self, record):
         response = requests.post("{}/config/save".format(self.config_manage_url), json=record)
         if response.status_code == 200:
-            return self.construct_links(record)
+            return response
 
-    def get_links(self, customer):
-        res = requests.get("{}/config/{}".format(self.config_manage_url, customer))
-        return self.construct_links(res.json())
+    def get_customer_links(self, customer):
+        record = self.get_remote_config(customer)
+        return self.construct_links(record)
 
     def construct_links(self, record):
         servers = record["servers"]

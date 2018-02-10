@@ -38,14 +38,14 @@ def provision_vms():
     # save data into config management system
     config_manage = ConfigManagementClient()
     res["_id"] = req_data["customer"]
-    links = config_manage.save(res)
+    res = config_manage.save(res)
 
     # run scripts inside of server
     if not compute_client.vms_exist():
         ssh_client = SSHClient()
         ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
         print("vms not exist")
-    return json.dumps(links)
+    return json.dumps(res)
 
 
 @app.route('/realtime/gcloud/destroy', methods=['POST'])
@@ -61,6 +61,13 @@ def destroy_vms():
     compute_client = ComputeClient(request_json)
     compute_client.delete_instances(instance_names=instance_names)
     return "success"
+
+
+@app.route('/realtime/links/<string:customer>', methods=['GET'])
+def get_links(customer):
+    config_manage = ConfigManagementClient()
+    links = config_manage.get_customer_links(customer)
+    return json.dumps(links)
 
 
 if __name__ == '__main__':

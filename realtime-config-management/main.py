@@ -12,9 +12,9 @@ CORS(app)
 mongo_url = "mongodb://35.187.230.101:27017"
 
 
-@app.route('/config/<string:env>', methods=['GET'])
-def get_config(env):
-    return AutoRealtimeGCloud("%s" % mongo_url).get_config(env)
+@app.route('/config/<string:customer>', methods=['GET'])
+def get_config(customer):
+    return AutoRealtimeGCloud("%s" % mongo_url).get_config(customer)
 
 
 @app.route('/config/save', methods=['POST'])
@@ -23,7 +23,7 @@ def save_config():
     mongo_client = MongoClient(mongo_url)
     if req_data is not None:
         res = mongo_client.save_record(req_data)
-    return json.dumps(res)
+        return json.dumps(res)
 
 
 @app.route('/config/test', methods=['GET'])

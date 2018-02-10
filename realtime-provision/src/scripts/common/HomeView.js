@@ -50,9 +50,10 @@ class Main extends Component {
         this.setState({loading: true});
         axios.post("http://localhost:9090/realtime/gcloud/setup", this.state.realtime_req_body)
             .then(function (res) {
-                if (res.status === 200) {
-                    _this.setState({links: res.data, loading: false});
-                }
+                return axios.get("http://localhost:9090/realtime/links/customer5")
+            })
+            .then(function (res) {
+                _this.setState({links: res.data});
             })
     }
 
