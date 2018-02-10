@@ -14,7 +14,8 @@ mongo_url = "mongodb://35.187.230.101:27017"
 
 @app.route('/config/<string:customer>', methods=['GET'])
 def get_config(customer):
-    return AutoRealtimeGCloud("%s" % mongo_url).get_config(customer)
+    record = AutoRealtimeGCloud("%s" % mongo_url).get_config(customer)
+    return json.dumps(record)
 
 
 @app.route('/config/save', methods=['POST'])
