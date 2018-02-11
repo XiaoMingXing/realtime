@@ -69,7 +69,7 @@ class ComputeClient:
 
     def provision_app_vm(self):
         instance_name = "app-instance"
-        ami_name = "realtime-app-ami-v2"
+        ami_name = "realtime-app-ami"
         config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
@@ -257,9 +257,9 @@ class ComputeClient:
 
     def get_config_scripts(self):
         return {
-            'app-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_app.sh"',
-            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"',
-            'kafka-instance': 'sudo -u mxxiao -H sh -c "nohup ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties > ~/kafka/kafka.log 2>&1 &"'
+            'app-instance': 'cd ~/projects/realtime/realtime-automation; ./start_app.sh',
+            'kafka-connector-instance': 'cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh',
+            'kafka-instance': 'nohup ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties > ~/kafka/kafka.log 2>&1 &'
         }
 
     def vms_exist(self):
