@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start business system
-export PROJECT_HOME=/home/mxxiao/projects/realtime
+export PROJECT_HOME=~/projects/realtime
 
 prepare(){
     #install git
