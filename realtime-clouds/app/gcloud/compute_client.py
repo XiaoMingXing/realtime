@@ -249,6 +249,7 @@ class ComputeClient:
         request_json = {"project": self.project, "region": self.region, "zone": self.zone}
         _handlers = Handlers()
         _config = {
+            "app-instance": _handlers.get_app_service_url,
             "mongo-instance": _handlers.get_mongo_url,
             "kafka-instance": _handlers.get_kafka_url,
             "kafka-connector-instance": _handlers.get_kafka_connector_url
