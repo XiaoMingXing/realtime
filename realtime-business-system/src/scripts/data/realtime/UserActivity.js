@@ -10,7 +10,7 @@ class UserActivity extends Component {
     CONSUMER_INSTANCE_NAME = "my_consumer_instance";
     TOPICS = ["topic-test2"];
 
-    CONFIG_MANAGE_URL = "http://35.197.153.3:9000/config/customer5";
+    CONFIG_MANAGE_URL = "http://35.187.244.144:9000/config/customer5";
 
     constructor(props) {
         super(props);

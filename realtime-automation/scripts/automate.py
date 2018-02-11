@@ -7,7 +7,7 @@ from os.path import dirname
 
 ignore_list = [".*", "node_modules", "target", "bower_components"]
 config_file_pattern = "*config.properties"
-config_manage_get = "http://35.197.153.3:9000/config"
+config_manage_get = "http://35.187.244.144:9000/config"
 
 
 def get_remote_config(customer_id):

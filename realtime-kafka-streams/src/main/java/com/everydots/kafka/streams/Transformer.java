@@ -53,7 +53,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Transformer {
 
-    private static final String CONFIG_MANAGEMENT_URL = "http://35.197.153.3:9000/config/customer5";
+    private static final String CONFIG_MANAGEMENT_URL = "http://35.187.244.144:9000/config/customer5";
 
     final static Logger logger = LoggerFactory.getLogger(Transformer.class);
 

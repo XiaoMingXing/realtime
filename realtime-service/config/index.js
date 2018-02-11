@@ -22,7 +22,7 @@ let http = require('http');
 
 function load_config(callback) {
     let options = {
-        host: "35.197.153.3",
+        host: "35.187.244.144",
         port: 9000,
         path: '/config/customer5',
         method: 'GET'

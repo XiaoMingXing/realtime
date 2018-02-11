@@ -5,7 +5,7 @@ import requests
 
 class ConfigManagementClient:
     def __init__(self):
-        self.config_manage_url = "http://35.197.153.3:9000"
+        self.config_manage_url = "http://35.187.244.144:9000"
         pass
 
     def get_remote_config(self, customer):
