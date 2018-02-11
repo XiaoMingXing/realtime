@@ -87,8 +87,8 @@ class ComputeClient:
 
     def provision_kafka_vm(self):
         instance_name = "kafka-instance"
-        container_name = "spotify/kafka"
-        config = self.get_container_config(instance_name, container_name)
+        ami_name = "realtime-kafka"
+        config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
     def describe_instance_ip(self, res):
@@ -258,7 +258,8 @@ class ComputeClient:
     def get_config_scripts(self):
         return {
             'app-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_app.sh"',
-            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"'
+            'kafka-connector-instance': 'sudo -u mxxiao -H sh -c "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"',
+            'kafka-instance': 'sudo -u mxxiao -H sh -c "nohup ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties > ~/kafka/kafka.log 2>&1 &"'
         }
 
     def vms_exist(self):
