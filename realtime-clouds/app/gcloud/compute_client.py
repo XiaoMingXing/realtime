@@ -22,6 +22,11 @@ class Handlers:
             "kafka_rest_url": "http://{}:8082".format(args["public_ip"])
         }
 
+    def get_app_service_url(self, **args):
+        return {
+            "app_service_url": "http://{}:8089".format(args["public_ip"])
+        }
+
 
 class ComputeClient:
     def __init__(self, options):
@@ -320,6 +325,7 @@ if __name__ == '__main__':
     config = {
         "mongo-instance": handlers.get_mongo_url,
         "kafka-instance": handlers.get_kafka_url,
+        "app-instance": handlers.get_app_service_url,
         "kafka-connector-instance": handlers.get_kafka_connector_url
     }
 

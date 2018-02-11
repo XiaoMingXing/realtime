@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import Widget from '../../widget'
 import CircleProgress from '../../circle-progress'
-import io from '../../socket'
+import io from "socket.io-client"
 
 
 export default class PagePV extends Component {
@@ -19,11 +19,14 @@ export default class PagePV extends Component {
 
     componentDidMount() {
         let _this = this;
-        io(function (socket) {
-            socket.on("newDataComes", function (data) {
-                _this.setState({totalPV: data});
-            })
-        })
+        fetch(this.props.configManageUrl)
+            .then(data => data.json())
+            .then((data) => {
+                let socket = io(data["app_service_url"]);
+                socket.on("newDataComes", function (data) {
+                    _this.setState({totalPV: data});
+                });
+            });
     }
 
     handleData(data) {

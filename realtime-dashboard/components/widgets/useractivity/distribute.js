@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Widget from '../../widget'
-import io from '../../socket'
+import io from "socket.io-client"
 import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from 'recharts';
 
 
@@ -19,12 +19,15 @@ export default class BrowserDistribution extends Component {
 
     componentDidMount() {
         let _this = this;
-        io(function (socket) {
-            socket.on("browserDistribution", function (data) {
-                data["name"] = "Total PV";
-                _this.setState({data: [data]});
-            })
-        })
+        fetch(this.props.configManageUrl)
+            .then(data => data.json())
+            .then((data) => {
+                let socket = io(data["app_service_url"]);
+                socket.on("browserDistribution", function (data) {
+                    data["name"] = "Total PV";
+                    _this.setState({data: [data]});
+                })
+            });
     }
 
     render() {
