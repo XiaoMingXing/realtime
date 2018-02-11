@@ -22,6 +22,8 @@ class ConfigManagementClient:
         return self.construct_links(record)
 
     def construct_links(self, record):
+        if record is None:
+            return
         servers = record["servers"]
         result = {}
         for server in servers:

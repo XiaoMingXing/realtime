@@ -37,7 +37,9 @@ class Main extends Component {
         let customer_id = _this.state.realtime_req_body["customer"];
         axios.get("http://localhost:9090/realtime/links/" + customer_id)
             .then(function (res) {
-                _this.setState({links: res.data});
+                if (res && res.data) {
+                    _this.setState({links: res.data});
+                }
             })
     }
 
@@ -63,7 +65,9 @@ class Main extends Component {
                 return axios.get("http://localhost:9090/realtime/links/" + customer_id)
             })
             .then(function (res) {
-                _this.setState({links: res.data});
+                if (res.data && Object.keys(res.data).length > 0) {
+                    _this.setState({links: res.data});
+                }
             })
     }
 
@@ -102,9 +106,10 @@ class Main extends Component {
 
             <div className="links">
                 <ul>
-                    {Object.keys(links).map(function (key, index) {
-                        return <li value={key} key={index}><a href={links[key]}>{key}</a></li>
-                    })}
+                    {
+                        Object.keys(links).map(function (key, index) {
+                            return <li value={key} key={index}><a href={links[key]}>{key}</a></li>
+                        })}
                 </ul>
             </div>
 
