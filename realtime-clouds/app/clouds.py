@@ -41,7 +41,7 @@ def provision_vms():
     config_manage.save(res)
 
     # run scripts inside of server
-    if not not_exist:
+    if not_exist:
         ssh_client = SSHClient()
         ssh_client.run_scripts(res.get("servers", None), compute_client.get_config_scripts())
         print("vms not exist")
