@@ -12,7 +12,7 @@ class Handlers:
 
     def get_kafka_url(self, **args):
         return {
-            "kafka_broker_url": "http://{}:9092".format(args["public_ip"]),
+            "kafka_broker_url": "{}:9092".format(args["public_ip"]),
             "kafka_sink_topic": "sink-topic",
             "kafka_source_topic": "topic-test2"
         }
