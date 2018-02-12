@@ -74,13 +74,13 @@ class ComputeClient:
 
     def provision_app_vm(self):
         instance_name = "app-instance"
-        ami_name = "realtime-app-ami"
+        ami_name = "realtime-app-ami-v2"
         config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
     def provision_connector_vm(self):
         instance_name = "kafka-connector-instance"
-        ami_name = "realtime-connectors"
+        ami_name = "realtime-connectors-v2"
         config = self.get_ami_instance_config(instance_name, ami_name)
         return self.create_instance(config)
 
