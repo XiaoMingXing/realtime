@@ -24,8 +24,10 @@ export default class BrowserDistribution extends Component {
             .then((data) => {
                 let socket = io(data["app_service_url"]);
                 socket.on("browserDistribution", function (data) {
-                    data["name"] = "Total PV";
-                    _this.setState({data: [data]});
+                    if (data) {
+                        data["name"] = "Total PV";
+                        _this.setState({data: [data]});
+                    }
                 })
             });
     }

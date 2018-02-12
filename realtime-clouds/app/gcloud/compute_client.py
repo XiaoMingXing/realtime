@@ -263,8 +263,8 @@ class ComputeClient:
 
     def get_config_scripts(self):
         return {
-            'app-instance': 'cd ~/projects/realtime/realtime-automation; ./start_app.sh',
-            'kafka-connector-instance': 'cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh',
+            'app-instance': 'sudo -u root -H sh -c \"cd ~/projects/realtime/realtime-automation; ./start_app.sh\"',
+            'kafka-connector-instance': 'sudo -u root -H sh -c \"cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh\"',
             'kafka-instance': 'nohup ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties > ~/kafka/kafka.log 2>&1 &'
         }
 

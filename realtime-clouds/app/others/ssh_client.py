@@ -57,10 +57,14 @@ class SSHClient:
 
 
 if __name__ == '__main__':
-    hostname = "35.197.154.212"
-    hostname2 = "35.185.184.76"
-    command = "sudo -u mxxiao -H sh -c 'cd ~/projects/realtime/realtime-automation; ./start_app.sh'"
-    command2 = "sudo -u mxxiao -H sh -c \"cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh\""
+    hostname = "35.197.153.3"
+    hostname2 = "35.198.250.50"
+    # command = "cd ~/projects/realtime/realtime-automation; ./start_app.sh"
+    # command2 = "cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh"
+
+    command = "sudo -u root -H sh -c 'cd ~/projects/realtime/realtime-automation; ./start_app.sh'"
+    command2 = "sudo -u root -H sh -c \"cd ~/projects/realtime/realtime-automation; ./start_kafka_related.sh\""
+
 
     script_runner = ScriptRunner()
     script_runner.run_command(hostname, command)
