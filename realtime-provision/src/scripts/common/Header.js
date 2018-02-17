@@ -7,9 +7,9 @@ class Header extends Component {
 
     render() {
 
-       let headerStyle = {
-           backgroundColor: "black"
-       }
+        let headerStyle = {
+            backgroundColor: "black"
+        };
 
         return (
             <div>
@@ -24,7 +24,7 @@ class Header extends Component {
                             <div className="col-md-6">
                                 <ul className="nav navbar-nav">
                                     <li><Link to="/">Main</Link></li>
-                                </ul>ªªªªª
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -33,4 +33,5 @@ class Header extends Component {
         );
     }
 }
+
 export default Header;
